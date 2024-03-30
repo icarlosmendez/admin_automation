@@ -1,0 +1,10 @@
+# vars.yml
+
+# The following commands are used to add new entries to the /etc/apt/sources.list file 
+# They configure the software sources on the Debian-based Proxmox VE server
+
+sources_list_entries:
+  - deb http://ftp.us.debian.org/debian bookworm main contrib
+  - deb http://ftp.us.debian.org/debian bookworm-updates main contrib
+  - deb http://security.debian.org bookworm/updates main contrib
+  - deb http://download.proxmox.com/debian bookworm pve-no-subscription

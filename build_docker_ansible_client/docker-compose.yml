@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  ansible:
+    image: alpine/ansible #https://hub.docker.com/r/alpine/ansible
+    volumes:
+      - ./ansible_playbook:/ansible_playbook
+      - ~/.ssh:/root/.ssh:ro
+    networks:
+      - proxmox_network
+
+networks:
+  proxmox_network:
