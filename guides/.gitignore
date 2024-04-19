@@ -1,0 +1,10 @@
+#.GitIgnore file for admin_automation project directory
+
+
+# SSH key generation tests
+samba_id_rsa
+samba_id_rsa.pub
+
+# Sensitive Data Scan log files
+*.log
+

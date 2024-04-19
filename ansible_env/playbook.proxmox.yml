@@ -1,0 +1,110 @@
+# Good article about getting up and running with Ansible and Proxmox
+# https://bobcares.com/blog/proxmox-ansible-automation/
+
+## Test connection to Proxmox Host
+- name: Test connection to Proxmox Host
+  hosts: my_proxmox_hosts
+  tasks:
+    # Ping my hosts
+    - name: Ping my hosts
+      ansible.builtin.ping:
+    # Print Hello World message
+    - name: Print Hello World message
+      ansible.builtin.debug:
+        msg: Hello from Proxmox World!
+## Ensure required packages are installed
+- name: Ensure required packages are installed
+  hosts: my_proxmox_hosts
+  gather_facts: yes
+  tasks:
+    - name: Install Ansible Galaxy
+      ansible.builtin.package:
+        name: ansible
+        state: latest
+    - name: Install python3-pip
+      ansible.builtin.package:
+        name: python3-pip
+        state: present
+    # - name: Install community.general collection
+    #   ansible.builtin.command: ansible-galaxy collection install community.general
+    - name: Install proxmoxer using pip3
+      ansible.builtin.command: pip3 install proxmoxer
+      when: ansible_distribution == 'Ubuntu'
+## Your tasks that rely on proxmoxer go here
+## Query Proxmox node configuration
+- name: Query Proxmox node configuration
+  # ## Ensure pip is installed
+  # - name: Ensure pip is installed
+  #   hosts: my_proxmox_hosts
+  #   gather_facts: no
+  #   tasks:
+  #     # Check if python3-pip is installed
+  #     - name: Check if python3-pip is installed
+  #       command: "dpkg -l python3-pip"
+  #       register: pip_check
+  #       ignore_errors: true
+  #     # Install python3-pip using package manager
+  #     - name: Install python3-pip using package manager
+  #       apt:
+  #         name: python3-pip
+  #         state: present
+  #       when: pip_check.rc != 0
+  #     # Install pip for Python 3 using curl
+  #     - name: Install pip for Python 3 using curl
+  #       become: true
+  #       command: "curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3 get-pip.py"
+  #       when: pip_check.rc != 0
+
+  # ## Ensure proxmoxer is installed
+  # - name: Ensure proxmoxer is installed
+  #   hosts: my_proxmox_hosts
+  #   gather_facts: no
+  #   tasks:
+  #     # Install proxmoxer using pip
+  #     - name: Install proxmoxer using pip
+  #       pip:
+  #         name: proxmoxer
+  #         state: present
+  #     # Install requests using pip
+  #     - name: Install requests using pip
+  #       pip:
+  #         name: requests
+  #         state: present
+  hosts: my_proxmox_hosts
+  gather_facts: no
+  tasks:
+    # Query Proxmox node
+    - name: Query Proxmox node
+      community.general.proxmox_kvm:
+        vmid: 100
+        api_user: root@pam
+        api_password: mypassword
+        api_host: Datacenter
+        name: Samba
+        node: proxmox
+        action: query
+      register: proxmox_node_info
+    # Print Proxmox node configuration
+    - name: Print Proxmox node configuration
+      debug:
+        var: proxmox_node_info
+## Create Samba container with minimal options
+- name: Create Samba container with minimal options
+  hosts: my_proxmox_hosts
+  tasks:
+    - name: Query Proxmox node
+      community.general.proxmox_kvm:
+        vmid: 100
+        api_user: root@pam
+        api_password: samba
+        api_host: proxmox
+        name: Samba
+        node: proxmox
+        nameservers:
+          - '1.1.1.1'
+          - '8.8.8.8'
+        net:
+          net0: 'virtio,bridge=vmbr0,tag=102'
+        ipconfig:
+          ipconfig0: 'ip=192.168.1.102/24'
+          # template: 'local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst'

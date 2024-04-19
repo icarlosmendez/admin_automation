@@ -83,7 +83,7 @@ check_for_known_hosts() {
 # Define and collect server information to be stored as variables and used in our functions
 echo "Enter server information:"
 # Name your server. This will be prepended to the SSH keys for easy identification
-read_with_default "Server designator (e.g., Proxmox, Linux, Web Server, etc.)" server_designator
+read_with_default "Server designator (e.g., proxmox, linux, web_server, etc.)" server_designator
 echo "Server designator set to: $server_designator"
 # Enter either an FQDN or IP address as the target
 read_with_default "Server hostname or IP address" server_address
@@ -155,6 +155,8 @@ fi
 
 exit 0
 
+# Some of the below actions have made it into the script above but maybe not as gracefully as they seem below.
+# Seems like a little refactor party over a cup of coffee!
 
 # Further instructions I want to add into this script to make it a complete process for creating the keys 
 # and getting onto the server they were created for right away.
@@ -168,8 +170,8 @@ exit 0
 # scp /path/to/your/public_key.pub username@server_ip:/path/where/you/want/to/save
 
 # For the sake of illustration, assuming your public key is ~/.ssh/id_rsa.pub, 
-# the username is user, and the server IP is 192.168.1.101, the command will be:
-# scp ~/.ssh/id_rsa.pub user@192.168.1.101:~/temp_pub_key.pub
+# the username is user, and the server IP is your_ip_address, the command will be:
+# scp ~/.ssh/id_rsa.pub user@your_ip_address:~/temp_pub_key.pub
 
 # This command transfers your public key to the home directory of user on the server, 
 # temporarily naming it temp_pub_key.pub.
@@ -177,7 +179,7 @@ exit 0
 # Append the Public Key to authorized_keys:
 
 # First, SSH into your Proxmox server:
-# ssh user@192.168.1.101
+# ssh user@your_ip_address
 
 # Then, append the public key to the ~/.ssh/authorized_keys file. 
 # If ~/.ssh/authorized_keys doesn't exist, this command will create it:

@@ -1,0 +1,8 @@
+# Ansible Inventory File
+
+my_proxmox_hosts:
+  hosts:
+    proxmox:
+      ansible_host: 192.168.1.101
+  vars:
+    ansible_user: root
