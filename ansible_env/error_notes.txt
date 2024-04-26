@@ -1,35 +1,45 @@
-TASK [Install proxmoxer using pip] ********************************************************************************************************
-fatal: [proxmox]: FAILED! => "changed": false, "cmd": ["/usr/bin/python3", "-m", "pip.__main__", "install", "proxmoxer"], "msg": ":stderr: error: externally-managed-environment 
+## TASK: Install proxmoxer using pip
 
-This environment is externally managed ─> To install Python packages system-wide, try apt install    python3-xyz, where xyz is the package you are trying to install.
+- **Error Message**: 
+  ```
+  "changed": false, "cmd": ["/usr/bin/python3", "-m", "pip.__main__", "install", "proxmoxer"], "msg": ":stderr: error: externally-managed-environment 
 
-If you wish to install a non-Debian-packaged Python package, create a virtual environment using python3 -m venv path/to/venv. Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make sure you have python3-full installed. 
+  This environment is externally managed ─> To install Python packages system-wide, try apt install python3-xyz, where xyz is the package you are trying to install.
 
-If you wish to install a non-Debian packaged Python application, it may be easiest to use pipx install xyz, which will manage a virtual environment for you. Make sure you have pipx installed. See /usr/share/doc/python3.11/README.venv for more information. 
+  If you wish to install a non-Debian-packaged Python package, create a virtual environment using python3 -m venv path/to/venv. Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make sure you have python3-full installed. 
 
-note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.\nhint: See PEP 668 for the detailed specification.
+  If you wish to install a non-Debian packaged Python application, it may be easiest to use pipx install xyz, which will manage a virtual environment for you. Make sure you have pipx installed. See /usr/share/doc/python3.11/README.venv for more information. 
 
-TASK [Install community.general collection] ***********************************************************************************************
-fatal: [proxmox]: FAILED! => "changed": false, "cmd": "ansible-galaxy collection install community.general", "msg": "[Errno 2] No such file or directory: b'ansible-galaxy'", "rc": 2, "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []
+  note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.\nhint: See PEP 668 for the detailed specification.
+  ```
 
-TASK [Install community.general collection] ***********************************************************************************************
-fatal: [proxmox]: FAILED! => "changed": true, "cmd": ["ansible-galaxy", "collection", "install", "community.general"], "delta": "0:05:09.023068", "end": "2024-04-05 09:03:47.865342", "msg": "non-zero return code", "rc": 1, "start": "2024-04-05 08:58:38.842274", 
+- **Error Message**: 
+  ```
+  "changed": false, "cmd": "ansible-galaxy collection install community.general", "msg": "[Errno 2] No such file or directory: b'ansible-galaxy'", "rc": 2, "stderr": "", "stderr_lines": [], "stdout": "", "stdout_lines": []
+  ```
 
-"stderr": "ERROR! Unknown error when attempting to call Galaxy at 'https://galaxy.ansible.com/api/v3/collections/community/general/versions/1.3.2/': The read operation timed out", 
+- **Error Message**: 
+  ```
+  "changed": true, "cmd": ["ansible-galaxy", "collection", "install", "community.general"], "delta": "0:05:09.023068", "end": "2024-04-05 09:03:47.865342", "msg": "non-zero return code", "rc": 1, "start": "2024-04-05 08:58:38.842274", 
 
-"stderr_lines": ["ERROR! Unknown error when attempting to call Galaxy at 'https://galaxy.ansible.com/api/v3/collections/community/general/versions/1.3.2/': The read operation timed out"], 
+  "stderr": "ERROR! Unknown error when attempting to call Galaxy at 'https://galaxy.ansible.com/api/v3/collections/community/general/versions/1.3.2/': The read operation timed out", 
 
-"stdout": "Starting galaxy collection install process Process install dependency map", 
-"stdout_lines": ["Starting galaxy collection install process", "Process install dependency map"]
+  "stderr_lines": ["ERROR! Unknown error when attempting to call Galaxy at 'https://galaxy.ansible.com/api/v3/collections/community/general/versions/1.3.2/': The read operation timed out"], 
 
-TASK [Install community.general collection] ***********************************************************************************************
-fatal: [proxmox]: FAILED! => "changed": true, "cmd": ["ansible-galaxy", "collection", "install", "community.general"], "delta": "0:00:15.590975", "end": "2024-04-05 09:09:03.086241", "msg": "non-zero return code", "rc": 1, "start": "2024-04-05 09:08:47.495266", 
+  "stdout": "Starting galaxy collection install process Process install dependency map", 
+  "stdout_lines": ["Starting galaxy collection install process", "Process install dependency map"]
+  ```
 
-"stderr": "[WARNING]: Skipping Galaxy server https://galaxy.ansible.com/api/. Got an unexpected error when getting available versions of collection community.general: 
+- **Error Message**: 
+  ```
+  "changed": true, "cmd": ["ansible-galaxy", "collection", "install", "community.general"], "delta": "0:00:15.590975", "end": "2024-04-05 09:09:03.086241", "msg": "non-zero return code", "rc": 1, "start": "2024-04-05 09:08:47.495266", 
 
-Unknown error when attempting to call Galaxy at\n'https://galaxy.ansible.com/api/v3/collections/community/general/': The read operation timed out ERROR! Unknown error when attempting to call Galaxy at 'https://galaxy.ansible.com/api/v3/collections/community/general/': The read operation timed out", 
+  "stderr": "[WARNING]: Skipping Galaxy server https://galaxy.ansible.com/api/. Got an unexpected error when getting available versions of collection community.general: 
 
-"stderr_lines": ["[WARNING]: Skipping Galaxy server https://galaxy.ansible.com/api/. Got an", "unexpected error when getting available versions of collection", "community.general: Unknown error when attempting to call Galaxy at", "'https://galaxy.ansible.com/api/v3/collections/community/general/': The read", "operation timed out", "ERROR! Unknown error when attempting to call Galaxy at 'https://galaxy.ansible.com/api/v3/collections/community/general/': The read operation timed out"], 
+  Unknown error when attempting to call Galaxy at\n'https://galaxy.ansible.com/api/v3/collections/community/general/': The read operation timed out ERROR! Unknown error when attempting to call Galaxy at 'https://galaxy.ansible.com/api/v3/collections/community/general/': The read operation timed out", 
 
-"stdout": "Starting galaxy collection install process\nProcess install dependency map", 
-"stdout_lines": ["Starting galaxy collection install process", "Process install dependency map"]
+  "stderr_lines": ["[WARNING]: Skipping Galaxy server https://galaxy.ansible.com/api/. Got an", "unexpected error when getting available versions of collection", "community.general: Unknown error when attempting to call Galaxy at", "'https://galaxy.ansible.com/api/v3/collections/community/general/': The read", "operation timed out", "ERROR! Unknown error when attempting to call Galaxy at 'https://galaxy.ansible.com/api/v3/collections/community/general/': The read operation timed out"], 
+
+  "stdout": "Starting galaxy collection install process\nProcess install dependency map", 
+  "stdout_lines": ["Starting galaxy collection install process", "Process install dependency map"]
+  ```
