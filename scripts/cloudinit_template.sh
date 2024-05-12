@@ -17,16 +17,16 @@
 
 # Purpose: Create a Cloud Init template for quickly spinning up VM's in Proxmox
 # Expected Environment: Running install of Proxmox waiting to be populated with VM's
-
-# Prerequisites: SSH/Root access, Internet connectivity in your proxmox node.
-# Prerequisites: Configured and useable storage.
-# Prerequisites: Choice of Linux/Ubuntu distro.
+# Expected Environment: Admin workstation where you do your DevOps wizardry 
+# Prerequisites: SSH/Root access, Internet connectivity in your proxmox node
+# Prerequisites: Configured and useable storage
+# Prerequisites: Choice of Linux/Ubuntu distro
 # Recommended: https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.img
 
 # ##################################################### #
 # Preparatory Procedures
 
-# From your terminal or shell, not in Proxmox...
+# From your terminal or shell, presuming you're not in Proxmox...
 
 # * Use SCP to copy this script to your Proxmox server:
 # scp this_script.sh root@YOUR_SERVER_IP:/root/
