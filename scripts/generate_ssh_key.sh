@@ -1,45 +1,52 @@
 #!/bin/bash
 
-# Interactive script to generate SSH key pair for server access
+# ##################################################### #
+# Context
 
-# The first thing that will need to be done is
-# You may need to "show" hidden files
-# To do this on Mac, in Finder, use the keyboard shortcut ctrl + shift + .
-# From there you should see your hidden files in Terminal as well
+# Purpose: Interactive script to generate SSH key pairs for secure server access
 
-# Copy this script to your ~/.ssh directory
+# Expected Environment: A workstation with this script and a target server
 
-# Then ensure the script is executable, 
-# Set permissions using the following cmd
+# Prerequisites: See "Expected Environment"
+
+
+# ##################################################### #
+# Preparatory Procedures
+
+# * Copy this script to your local ~/.ssh directory
+# Copy/Paste or any other method of your choice
+
+# * Set executable permissions for the script: 
 # chmod +x ~/.ssh/generate_ssh_key.sh
 
-# When you run the script (./generate_ssh_key.sh), 
-# it will interactively prompt you for the server information, 
-# including a designator, hostname or IP address and username for SSH login. 
-# It will then generate a key pair with the specified information. 
-# If desired, you can provide a passphrase for additional security.
+# * Run the script:
+# bash this_script.sh
 
-# The script will display the public key, 
-# which you can then add to the authorized_keys file on the server
-# to enable SSH access using the generated key pair.
 
-# The script is interactive and includes variables to hold values 
-# relevant to the server you are preparing to administer.
-# Additionally, the script uses the variables 
-# to provide reasonable naming recommendations for the keys.
+# ##################################################### #
+# Description
 
-# You can run this same script again and again, 
-# allowing you to easily generate unique SSH key pairs 
-# for unique servers in a consistent manner, 
-# making your deployment process more efficient and standardized. 
-# Remember to keep your private keys secure 
-# and only share the public keys with the appropriate servers.
+# * Functionality:
+# This interactive script prompts for server details including a unique designator, hostname (or IP address), and the username required for SSH access.
+# It generates a SSH key pair based on the provided information. You have the option to secure the key pair with a passphrase for enhanced security.
 
-# Function to read user input with a default value
-read_with_default() {
-  # Usage: read_with_default "prompt" "default_value"
-  # -r: Do not allow backslashes to escape any characters (raw input).
-  # -p: Display the "prompt" without a trailing newline before reading the input.
+# * Key Usage:
+# Upon completion, the script displays the public key. This should be added to the authorized_keys file on the intended server to facilitate SSH access using the newly generated key pair.
+
+# * Features:
+# The script stores server-specific information in designated variables, which are then used to suggest meaningful key pair names.
+# It is designed for reusability, allowing for the quick creation of distinct SSH key pairs for different servers—streamlining and standardizing your deployment process.
+
+# * Security Reminder:
+# Maintain the confidentiality of your private keys. Share only the public keys with the intended servers.
+
+
+# ##################################################### #
+# Functions
+
+# Function to gather user input with a default value
+gather_input_with_default() {
+  # Usage: gather_input_with_default "prompt" "default_value"
   read -r -p "$1 [$3]: " input
   if [[ -z "$input" ]]; then
     eval "$2='$3'"
@@ -49,7 +56,7 @@ read_with_default() {
 }
 
 # Function to sanitize the server designator for file naming
-sanitize_for_filename() {
+sanitize() {
   # Remove characters that are not allowed in file names using 'tr' command
   # The tr command processes all characters, including the non-printing ones.
   # Characters to remove: \ / : * ? " < > |
@@ -58,7 +65,7 @@ sanitize_for_filename() {
 }
 
 # Function to check for and clean up known_hosts entry if exists
-check_for_known_hosts() {
+check_known_hosts() {
   known_host_check=$(ssh-keygen -F "${server_address}")
   if [[ ! -z "$known_host_check" ]]; then
     echo "Found an existing entry in known_hosts for ${server_address}."
@@ -80,35 +87,40 @@ check_for_known_hosts() {
   fi
 }
 
-# Define and collect server information to be stored as variables and used in our functions
+
+# ##################################################### #
+# The Script
+
+# Define and collect server information to be stored as variables and used by the functions
+clear
 echo "Enter server information:"
+
 # Name your server. This will be prepended to the SSH keys for easy identification
-read_with_default "Server designator (e.g., proxmox, linux, web_server, etc.)" server_designator
+gather_input_with_default "Server designator (e.g., proxmox, linux, web_server, etc.)" server_designator
 echo "Server designator set to: $server_designator"
+
 # Enter either an FQDN or IP address as the target
-read_with_default "Server hostname or IP address" server_address
+gather_input_with_default "Server hostname or IP address" server_address
 echo "Server hostname or IP address set to: $server_address"
+
 # Enter the username you wish to use when initially logging into your server
 # In most cases, this will likely be root here with the expectation of adding
 # role based users for admin purposes once you're logged in to the server
-read_with_default "Username for SSH login" server_username
+gather_input_with_default "Username for SSH login" server_username
 echo "Username for SSH login set to: $server_username"
 
-# Do what the function call suggests to prevent errors due to prior use of the same server info
-check_for_known_hosts
+# Prevent errors caused by hostname/fqdn/ip conflicts
+check_known_hosts
 
 # Sanitize the server designator for file naming
-sanitized_server_designator=$(sanitize_for_filename "$server_designator")
+sanitized_server_designator=$(sanitize "$server_designator")
 
-# Generate key names based on the server information
+# Generate key names based on sanitized server designator
 key_name="${sanitized_server_designator}_id_rsa"
 private_key_file="${key_name}"
 public_key_file="${key_name}.pub"
 
 # Check if keys already exist
-# -f: Specifies the output file for the private key. The corresponding public key will have the '.pub' extension.
-# -r: Do not allow backslashes to escape any characters (raw input).
-# -p: Display the "prompt" without a trailing newline before reading the input.
 if [ -f "$private_key_file" ] || [ -f "$public_key_file" ]; then
   echo "SSH key pair already exists for $key_name."
   read -r -p "Do you want to overwrite the existing keys? (y/N): " overwrite_keys
@@ -119,15 +131,9 @@ if [ -f "$private_key_file" ] || [ -f "$public_key_file" ]; then
 fi
 
 # Ask for passphrase (optional)
-read_with_default "Enter a passphrase for the private key (leave blank for no passphrase)" passphrase
+gather_input_with_default "Enter a passphrase for the private key (leave blank for no passphrase)" passphrase
 
 # Generate the SSH key pair using 'ssh-keygen' command
-# Flags used:
-# -t: Specifies the type of key to create. In this case, 'rsa' is used for RSA key.
-# -b: Specifies the number of bits in the key. 4096 bits is considered secure and recommended.
-# -C: Adds a comment to the key, typically in the format "username@server_designator".
-# -N: Provides the passphrase to encrypt the private key. If left empty, no passphrase will be set.
-# -f: Specifies the output file for the private key. The corresponding public key will have the '.pub' extension.
 ssh-keygen -t rsa -b 4096 -C "$server_username@$sanitized_server_designator" -N "$passphrase" -f "$private_key_file"
 
 # Display the public key
@@ -155,17 +161,28 @@ fi
 
 exit 0
 
+
+# ##################################################### #
+# Notes
+
 # Some of the below actions have made it into the script above but maybe not as gracefully as they seem below.
 # Seems like a little refactor party over a cup of coffee!
 
-# Further instructions I want to add into this script to make it a complete process for creating the keys 
-# and getting onto the server they were created for right away.
+
+# ##################################################### #
+# Instructions - could be moved to the top of this script
+
+# Further instructions I want to add into this script to make it a complete process for creating the keys and getting onto the server they were created for right away.
 
 # Locate Your Public Key: Ensure you know the path to your public SSH key on your local system. 
 # By default, this might be ~/.ssh/id_rsa.pub for RSA keys or ~/.ssh/id_ed25519.pub for ED25519 keys. 
-# If you've generated your key pair using your script, it should be wherever your script saved it.
+# If you've generated your key pair using this script, it should be wherever your script saved it. Usually that's the same directory the script was run in ans so it serves to store and execute this script in ~/.ssh.
 
-# Transfer Your Public Key: You'll use the SCP command to transfer your public key file to your Proxmox server. 
+
+# ##################################################### #
+# Transfer keys to target server
+
+# Transfer Your Public Key: You'll use the SCP command to transfer your public key file to your preferred server. 
 # The general form of the command is as follows:
 # scp /path/to/your/public_key.pub username@server_ip:/path/where/you/want/to/save
 
@@ -176,6 +193,8 @@ exit 0
 # This command transfers your public key to the home directory of user on the server, 
 # temporarily naming it temp_pub_key.pub.
 
+
+# ##################################################### #
 # Append the Public Key to authorized_keys:
 
 # First, SSH into your Proxmox server:
@@ -185,12 +204,45 @@ exit 0
 # If ~/.ssh/authorized_keys doesn't exist, this command will create it:
 # cat ~/temp_pub_key.pub >> ~/.ssh/authorized_keys
 
+
+# ##################################################### #
 # Ensure the permissions are correct:
+
 # chmod 700 ~/.ssh
 # chmod 600 ~/.ssh/authorized_keys
+
+
+# ##################################################### #
+# Housekeeping
 
 # Finally, you can remove the temporary public key file:
 # rm ~/temp_pub_key.pub
 
+
+# ##################################################### #
+# Completion message
+
 # By the completion of these steps, you will have securely transferred your public SSH key to your Proxmox 
 # server and appended it to the authorized_keys file, granting you passwordless SSH access.
+
+
+# ##################################################### #
+# Flags used in the script
+
+# -t: Specifies the type of key to create. 
+# In this case, 'rsa' is used for RSA key.
+
+# -b: Specifies the number of bits in the key. 
+# 4096 bits is considered secure and recommended.
+
+# -C: Adds a comment to the key, 
+# typically in the format "username@server_designator".
+
+# -N: Provides the passphrase to encrypt the private key. 
+# If left empty, no passphrase will be set.
+
+# -f: Specifies the output file for the private key. 
+# The corresponding public key will have the '.pub' extension.
+
+# -r: Do not allow backslashes to escape any characters (raw input).
+# -p: Display the "prompt" without a trailing newline before reading the input.
