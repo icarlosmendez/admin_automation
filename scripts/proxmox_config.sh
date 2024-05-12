@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# * /******************************************************************/
+# * Copyright         : <2024> <Everybody>
+# * File Name         : <proxmox_config.sh>
+# * Description       : <Get a new install of Proxmox up and running>
+# *                    
+# * Revision History  :
+# * Date		Author 			Comments
+# * ------------------------------------------------------------------
+# * 05/11/2024	<iCarlosMendez>	<Insprired by Techno Tim>
+# *
+# * /******************************************************************/
+
 # Purpose: Configure a Proxmox VE server with best practices, install Terraform, and offer guided or expedited installation options.
 # Expected Environment: Fresh install of Proxmox VE.
 # Prerequisites: SSH/Root access, Internet connectivity.
