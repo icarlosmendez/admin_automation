@@ -1,5 +1,17 @@
 # !bin/bash
 
+# * /******************************************************************/
+# * Copyright         : <2024> <Everybody>
+# * File Name         : <cloudinit_template.sh>
+# * Description       : <Create Cloudinit template for Proxmox>
+# *                    
+# * Revision History  :
+# * Date		Author 			Comments
+# * ------------------------------------------------------------------
+# * 05/11/2024	<iCarlosMendez>	<Insprired by Jim's Garage>
+# *
+# * /******************************************************************/
+
 # ##################################################### #
 # Context
 
