@@ -222,7 +222,7 @@ progress_counter "Cleaning up after myself" 2
 rm cloudinit_template.sh
 progress_counter "Deleting script" 2
 
-# Closing script
+# Close shell
 progress_counter "Closing scripting session" 2
 
 # Close SSH
