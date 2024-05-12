@@ -2,6 +2,7 @@
 
 # Purpose: Configure a Samba server using best practices.
 # Expected Environment: Fresh install of Proxmox VE, fresh creation of LXC Samba container.
+# Alternate Expected Environment: Fresh install of Proxmox VE, install directly onto the Proxmox VE sans LXC container.
 # Expected Environment: Defined Network infrastructure and static IP's for everyone.
 # Prerequisites: SSH/Root access, Internet connectivity.
 # Prerequisites: Configured and useable storage (ZFS Pool).
@@ -23,6 +24,33 @@
 # Run the script:
 # bash this_script.sh
 
+# ##################################################### #
+
+# The above functions run as root are probably fine when working in a lab 
+# or test envrionment, but for prod work consider creating a non-root user 
+# and execute the script using sudo instead of root, said every SysAdmin ever. 
+
+# There is a call to the add-user() function below, but it might be good to 
+# move it up in the execution order, or have another version of it that is 
+# not tied to directory creation? 
+
+# Need to consider that to make this script more resilient and 
+# in accord with best practices. 
+
+# ##################################################### #
+
+# Some important notes about shared storage caputured from the forums
+# https://forum.proxmox.com/threads/ubuntu-file-media-server-nas-on-proxmox.83922/
+
+# You can't passthrough a datataset into a VM. 
+
+# If you want to access your files on the ZFS pool from inside the VM 
+# you need to use some kind of network protocol like NFS.
+
+# And datasets can only be created on the pool, 
+# so you need to do that on your host and not inside the VM. 
+
+# The guest has no access to ZFS at all.
 
 # ##################################################### #
 
