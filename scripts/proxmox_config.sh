@@ -285,13 +285,12 @@ echo "Script execution complete. Please review any messages above for additional
 
 # echo "Script completion. Your Proxmox server is now fortified with best practices and ready for the deployment of magical constructs. 🎉"
 
-# Next, to ensure we capture all the essential best practices from the community, let's identify key areas for enhancement:
+# Next, to ensure the capture all the essential best practices from the community, let's identify key areas for enhancement:
 # 1. Security Hardening
 # 2. Performance Tuning
 # 3. Backup and Recovery Strategies
 # 4. Virtual Machine Management
 # 5. Networking Configuration
 
-# These areas often contain the most valuable insights for optimizing Proxmox VE setups. We'll look into each, ensuring your script not only sets up your server but optimizes it for reliability, performance, and security.
+# These areas often contain the most valuable insights for optimizing Proxmox VE setups. I'll look into each, ensuring this script not only sets up the server but optimizes it for reliability, performance, and security.
 
-# Would you prefer to explore these additional best practices one by one, or is there a specific area you'd like to focus on first?**
