@@ -8,13 +8,13 @@
 
 #
 # How to use:
-#   chmod +x samba-access.sh
-#   ./samba-access.sh PATH_TO_SHARED_DIRECTORY  PERMISSIONS
-#
-#
-# $1 = path , e.g. /home/myuser/publicdir
-# $2 = permissions  ,  e.g  755
-#
+# chmod +x samba-access.sh
+# ./samba-access.sh PATH_TO_SHARED_DIRECTORY  PERMISSIONS
+
+
+$1 = path , e.g. /home/myuser/publicdir
+$2 = permissions  ,  e.g  755
+
 
 
 if [ -z "$1" ];then
