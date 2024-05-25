@@ -12,9 +12,9 @@ Apache - Web Server
 nGinX - Web/Reverse Proxy Server
 PostgreSQL - Database Server
 Mongo - Database Server
-Git - Local code repository
+Git/Gitea - Local code repository
 CI/CD - Jenkins server
-Alpine or other lightweight Linux distro - Host for running local AI LLM's (lmstudio.ai, Open Interpreter)
+Alpine or other lightweight Linux distro - Host for running local AI LLM's (Ollama, Open-webui, lmstudio.ai, Open Interpreter)
 Monitoring - YTBD
 PfSense - Firewall
 
