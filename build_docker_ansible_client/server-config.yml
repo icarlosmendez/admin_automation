@@ -1,12 +1,7 @@
-# server-config.yml
-
----
 - name: Update Proxmox VE Server
   # Populate the hosts parameter with your Proxmox server's hostname or IP address.
-  hosts: 192.168.1.101
+  hosts: 192.168.1.11
   become: yes
-
   roles:
     # Add additional roles here as you proceed with the configuration.
     - apt
-    
