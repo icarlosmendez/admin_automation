@@ -38,7 +38,7 @@ https://gist.github.com/Linerre/f11ad4a6a934dcf01ee8415c9457e7b2
 
 This document describes the steps required to setup a local dev environment using the Package Manager Nix, (versus Homebrew) Docker, and Docker Compose runtimes supported by Colima versus Docker Desktop or other options. I'm working on a Mac so this guidance can reasonably be expected to work on Macs, Linux, and other Unix types. Windows will require it's own guide.
 
-The overall project that I am working on is to get my local environment in a situation to run Docker with a minimal code footprint on my local system, requiring the least amount of resources to run.
+The overall project that I am working on is to get my local environment in a situation to run Docker with a minimal code footprint on my local system, requiring the least amount of resources to run. (I've since learned how to use a Python venv to run a clean environment so Docker is not really necessary on the local dev machine anymore.)
 
 The goal is to set up a Docker environment in which to run Ansible to administer local servers on my network initially. Later allowing for playbooks that can assist in provisioning and maintaining state in small business networks as a professional matter. Whether the professional activities are carried out on-site or remote is yet to be determined but is ultimately not of primary concern.
 
