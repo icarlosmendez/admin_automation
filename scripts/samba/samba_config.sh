@@ -30,11 +30,11 @@
 # Preparatory Procedures
 
 # Ensure the samba directory exists and set permissions
-# mkdir -p root@192.168.1.102:/etc/samba/
-# chmod 700 root@192.168.1.102:/etc/samba
+# mkdir -p root@192.168.1.100:/etc/samba/
+# chmod 700 root@192.168.1.100:/etc/samba
 # Copy the config file from the pwd into /etc/samba and set permissions
-# scp ./smb.conf root@192.168.1.102:/etc/samba/
-# chmod +x root@192.168.1.102:/etc/samba/samba.conf
+# scp ./smb.conf root@192.168.1.100:/etc/samba/
+# chmod +x root@192.168.1.100:/etc/samba/samba.conf
 
 # Use SCP to copy this script to your Samba container:
 # scp this_script.sh root@YOUR_SERVER_IP:/root/
