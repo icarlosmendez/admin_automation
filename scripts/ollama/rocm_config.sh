@@ -46,6 +46,13 @@ save_checkpoint() {
     echo "PHASE=$PHASE" > $CHECKPOINT_FILE
 }
 
+# Ensure PHASE is an integer
+if [ -n "$PHASE" ]; then
+    PHASE=$(($PHASE + 0))
+else
+    PHASE=1
+fi
+
 # Phase 1: Initial Setup and Key Download
 if [ "$PHASE" -eq 1 ]; then
     echo "Phase 1: Initial Setup and Key Download"
