@@ -15,7 +15,13 @@
 # ##################################################### #
 # Context
 
-# Purpose: Local LLMs, what else?
+# Purpose: Install AMD ROCm Software Stack to allow Machine Learning
+#          and AI workloads to be run on the GPU.
+
+# Prerequisites: Download and run the following scripts in order.
+# wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/master/scripts/ollama/rocm_config.sh
+
+# wget 
 
 # Registering repositories
 # Download and convert the package signing key.
@@ -61,6 +67,7 @@ sudo apt update
 
 # Install kernel driver
 sudo apt install amdgpu-dkms
+sudo reboot
 
 # Install ROCm packages
 sudo apt install rocm
@@ -89,9 +96,26 @@ dkms status
 
 # Verify ROCm installation.
 # Not sure if the intention is to cat or ls these to ensure they exist?
-# /opt/rocm-6.1.1/bin/rocminfo
-# /opt/rocm-6.1.1/bin/clinfo
+/opt/rocm-6.1.1/bin/rocminfo
+/opt/rocm-6.1.1/bin/clinfo
 
 # Verify package installation.
 # Ubuntu
 sudo apt list --installed
+
+# ensure that ROCm is correctly installed
+/opt/rocm/bin/rocminfo
+/opt/rocm/opencl/bin/clinfo
+
+# Ensure that the necessary kernel drivers are loaded
+if ! lsmod | grep -q amdgpu; then
+    sudo modprobe amdgpu
+fi
+
+# Confirm that your GPU is properly seated in the PCIe slot and is recognized by the system
+lspci | grep VGA
+
+# Making sure that the appropriate drivers and ROCm components are loaded within the VM.
+# kfd = Kernel Fusion Driver
+dmesg | grep kfd 
+lsmod | grep amdgpu
