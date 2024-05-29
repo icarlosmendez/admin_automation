@@ -18,10 +18,8 @@
 # Purpose: Install AMD ROCm Software Stack to allow Machine Learning
 #          and AI workloads to be run on the GPU.
 
-# Prerequisites: Download and run the following scripts in order.
+# Prerequisites: Download and run the following script.
 # wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/master/scripts/ollama/rocm_config.sh
-
-# wget 
 
 # Registering repositories
 # Download and convert the package signing key.
@@ -67,11 +65,15 @@ sudo apt update
 
 # Install kernel driver
 sudo apt install amdgpu-dkms
+echo "Please reboot the system to apply the changes."
+read -p "Press any key to reboot..." -n 1 -r
 sudo reboot
 
 # Install ROCm packages
 sudo apt install rocm
 echo "Please reboot system for all settings to take effect."
+read -p "Press any key to reboot..." -n 1 -r
+sudo reboot
 
 # Post-installation instructions
 # Applies to Linux
