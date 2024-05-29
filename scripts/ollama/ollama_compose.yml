@@ -1,0 +1,31 @@
+version: "3.7"
+services:
+  llm-host:
+    name: ollama
+    image: <image>
+    device:
+      - /dev/fdk
+      - /dev/dri
+    security_opt:
+      - seccomp:unconfined
+  llm-ui:
+    name: open webui
+    image: ghcr.io/open-webui/open-webui:main
+    ports:
+      - "3000:8080"
+    add_host:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - open-webui:/app/backend/data
+    restart: always
+  portainer:
+    image: portainer/portainer-ce:latest
+    ports:
+      - "8000:8000"
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    restart: always
+volumes:
+  portainer_data:
