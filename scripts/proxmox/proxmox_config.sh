@@ -204,13 +204,17 @@ for line in "${comment_grub_list_lines[@]}"; do
   comment_grub_list "$line"
 done
 
-echo "Commenting out of GRUB_CMDLINE_LINUX_DEFAULT="quiet" in /etc/default/grub completed."
+echo "Commenting out of $line in /etc/default/grub completed."
 
 
 # Define array with lines to be added
-add_grub_list_lines=(
-  GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on"
-)
+read -p "Do you have an Intel or AMD CPU? (Intel/AMD): " cpu_type
+
+if [[ "$cpu_type" == "Intel" ]]; then
+  add_grub_list_lines=("GRUB_CMDLINE_LINUX_DEFAULT=\"quiet intel_iommu=on\"")
+elif [[ "$cpu_type" == "AMD" ]]; then
+  add_grub_list_lines=("GRUB_CMDLINE_LINUX_DEFAULT=\"quiet amd_iommu=on\"")
+fi
 
 # Update /etc/default/grub by adding specific lines if they don't already exist
 add_to_grub_list() {
@@ -270,6 +274,9 @@ add_to_modules_list() {
 for line in "${modules_list_lines[@]}"; do
   add_to_modules_list "$line"
 done
+
+# Refresh initramfs | Only if you are using UEFI on the host
+# update-initramfs -u -k all
 
 echo "Addition of modules completed."
 
