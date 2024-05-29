@@ -18,12 +18,18 @@
 # Purpose: Install AMD ROCm Software Stack to allow Machine Learning
 #          and AI workloads to be run on the GPU.
 
-# Prerequisites: Download and run the following script.
+# Prerequisites:
 # wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/master/scripts/ollama/rocm_config.sh
 
-# Log Files: In the event that there are issues with the execution,
-#            check the following log file for clues.
-#            /var/lib/dkms/amdgpu/[version]/build/make.log
+# chmod +x rocm_config.sh
+
+# sudo touch /var/log/rocm_install_checkpoint
+# sudo chown $USER:$USER /var/log/rocm_install_checkpoint
+
+# Log Files: 
+# In the event that there are issues with the execution,
+# check the following log file for clues.
+# /var/lib/dkms/amdgpu/[version]/build/make.log
 
 # Define a checkpoint file
 CHECKPOINT_FILE="/var/log/rocm_install_checkpoint"
@@ -87,10 +93,10 @@ if [ "$PHASE" -eq 2 ]; then
     echo "Phase 2: Install Kernel Headers and AMD GPU Drivers"
 
     # Install AMD ROCm for linux (Ubuntu 22.04)
-    sudo apt install "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
+    sudo apt install -y "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
     sudo usermod -a -G render,video $LOGNAME # Adding current user to Video, Render groups. See prerequisites.
     wget https://repo.radeon.com/amdgpu-install/6.1.1/ubuntu/jammy/amdgpu-install_6.1.60101-1_all.deb
-    sudo apt install ./amdgpu-install_6.1.60101-1_all.deb
+    sudo apt install -y ./amdgpu-install_6.1.60101-1_all.deb
     sudo apt update
 
     PHASE=3
