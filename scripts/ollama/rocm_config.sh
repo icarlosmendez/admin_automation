@@ -116,12 +116,13 @@ if [ "$PHASE" -eq 3 ]; then
 
     # Install kernel driver
     sudo apt install -y amdgpu-dkms
+    PHASE=4
+    save_checkpoint
+
     echo "Please reboot the system to apply the changes."
     read -p "Press any key to reboot..." -n 1 -r
     sudo reboot
 
-    PHASE=4
-    save_checkpoint
     exit 0
 fi
 
@@ -131,12 +132,13 @@ if [ "$PHASE" -eq 4 ]; then
 
     # Install ROCm packages
     sudo apt install -y rocm
+    PHASE=5
+    save_checkpoint
+    
     echo "Please reboot system for all settings to take effect."
     read -p "Press any key to reboot..." -n 1 -r
     sudo reboot
 
-    PHASE=5
-    save_checkpoint
     exit 0
 fi
 
