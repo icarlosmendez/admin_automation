@@ -17,7 +17,8 @@
 
 # Purpose: Local LLMs, what else?
 
-
+# Prerequisites: Download and run the following script.
+# wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/master/scripts/ollama/ollama_config.sh
 
 # Barebones Ollama on linux
 # curl -fsSL https://ollama.com/install.sh | sh
@@ -42,7 +43,7 @@ sudo apt-get update
 # sudo apt-get install docker.io
 
 # Install Docker Compose
-sudo apt-get install docker-compose-plugin
+# sudo apt-get install docker-compose-plugin
 
 # Install "all" the Docker packages.
 # This command may have value in install "all" the Docker packages but for now I'm using the simple version above.
@@ -50,7 +51,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 # Open WebUI running alone in a Docker container.
 # Used when Ollama is installed on the Docker host.
-docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
+# docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
 
 # Open WebUI bundled with Ollama in a single Docker container.
 docker run --device /dev/kfd --device /dev/dri --security-opt seccomp=unconfined -d -p 3000:8080 --gpus=all -v ollama:/root/.ollama -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:ollama
