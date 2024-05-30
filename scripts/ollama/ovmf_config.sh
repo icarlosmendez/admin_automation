@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # * /******************************************************************/
 # * Copyright         : <2024> <Everybody>
 # * File Name         : <ovmf_config.sh>
@@ -9,7 +8,7 @@
 # * Revision History  :
 # * Date		Author 			Comments
 # * ------------------------------------------------------------------
-# * 05/11/2024	<iCarlosMendez>	<Insprired by amd>
+# * 05/11/2024	<iCarlosMendez>	<Inspired by amd>
 # *
 # * /******************************************************************/
 
@@ -17,8 +16,8 @@
 # Context
 
 # Purpose: Install OVMF on Proxmox host
-#          Modify the vm conf to disable secure boot
-#          Restart the vm to apply the new config
+#          Modify the VM config to disable secure boot
+#          Restart the VM to apply the new config
 
 # Prerequisites:
 # wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/master/scripts/ollama/ovmf_config.sh
@@ -32,14 +31,24 @@
 # Prompt the user for the VMID
 read -p "Please enter the VMID: " VMID
 
-# Find the OVMF.fd file and set the EFI_DIR variable
-EFI_CODE=$(find /usr -name "OVMF.fd" 2>/dev/null | head -n 1)
+# Define the destination directory for OVMF.fd
+DEST_DIR="/usr/share/ovmf"
+
+# Create the destination directory if it doesn't exist
+sudo mkdir -p "$DEST_DIR"
+
+# Find the 101-ovmf.fd file and move it to the permanent directory
+EFI_CODE=$(find / -name "101-ovmf.fd" 2>/dev/null | head -n 1)
 if [ -z "$EFI_CODE" ]; then
-    echo "OVMF.fd file not found. Ensure OVMF is installed correctly."
+    echo "101-ovmf.fd file not found. Ensure OVMF is installed correctly."
     exit 1
 fi
-EFI_DIR=$(dirname "$EFI_CODE")
-EFI_VARS="$EFI_DIR/OVMF_VARS.fd"
+
+# Move the 101-ovmf.fd file to the permanent directory
+sudo mv "$EFI_CODE" "$DEST_DIR"
+
+# Set the EFI_DIR variable
+EFI_DIR="$DEST_DIR"
 VM_CONF="/etc/pve/qemu-server/$VMID.conf"
 
 # Function to check if a command was successful
@@ -60,18 +69,10 @@ while ! apt-get update && apt-get install -y ovmf; do
     check_success || continue
 done
 
-# Verify the OVMF files exist
+# Verify the OVMF file exists
 if [ ! -f "$EFI_CODE" ]; then
-    echo "OVMF.fd file not found. Ensure OVMF is installed correctly."
+    echo "101-ovmf.fd file not found. Ensure OVMF is installed correctly."
     exit 1
-fi
-
-# Create a copy of OVMF.fd for variables if it does not exist
-if [ ! -f "$EFI_VARS" ]; then
-    echo "Creating OVMF_VARS.fd..."
-    while ! cp "$EFI_CODE" "$EFI_VARS"; do
-        check_success || continue
-    done
 fi
 
 # Backup the existing VM configuration file
@@ -83,7 +84,7 @@ done
 # Update the VM configuration file
 echo "Updating VM configuration..."
 bash -c "cat > $VM_CONF" <<EOF
-args: -drive if=pflash,format=raw,readonly=on,file=$EFI_CODE -drive if=pflash,format=raw,file=$EFI_VARS
+args: -drive if=pflash,format=raw,readonly=on,file=$EFI_CODE
 EOF
 check_success
 
@@ -99,3 +100,4 @@ echo "You can now proceed with the ROCm installation."
 # Verify Secure Boot status (run this command inside the VM)
 echo "Please verify Secure Boot status inside the VM with the following command:"
 echo "mokutil --sb-state"
+
