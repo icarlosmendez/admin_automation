@@ -29,9 +29,16 @@
 # The Script
 
 # Define variables
-VMID=101
-EFI_DIR="/usr/share/ovmf"
-EFI_CODE="$EFI_DIR/OVMF.fd"
+# Prompt the user for the VMID
+read -p "Please enter the VMID: " VMID
+
+# Find the OVMF.fd file and set the EFI_DIR variable
+EFI_CODE=$(find /usr -name "OVMF.fd" 2>/dev/null | head -n 1)
+if [ -z "$EFI_CODE" ]; then
+    echo "OVMF.fd file not found. Ensure OVMF is installed correctly."
+    exit 1
+fi
+EFI_DIR=$(dirname "$EFI_CODE")
 EFI_VARS="$EFI_DIR/OVMF_VARS.fd"
 VM_CONF="/etc/pve/qemu-server/$VMID.conf"
 
