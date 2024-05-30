@@ -49,7 +49,7 @@ check_success() {
 
 # Ensure the OVMF package is installed
 echo "Installing OVMF package..."
-while ! sudo apt-get update && sudo apt-get install -y ovmf; do
+while ! apt-get update && apt-get install -y ovmf; do
     check_success || continue
 done
 
@@ -62,14 +62,14 @@ fi
 # Create a copy of OVMF.fd for variables if it does not exist
 if [ ! -f "$EFI_VARS" ]; then
     echo "Creating OVMF_VARS.fd..."
-    while ! sudo cp "$EFI_CODE" "$EFI_VARS"; do
+    while ! cp "$EFI_CODE" "$EFI_VARS"; do
         check_success || continue
     done
 fi
 
 # Backup the existing VM configuration file
 echo "Backing up the existing VM configuration..."
-while ! sudo cp "$VM_CONF" "$VM_CONF.bak"; do
+while ! cp "$VM_CONF" "$VM_CONF.bak"; do
     check_success || continue
 done
 
