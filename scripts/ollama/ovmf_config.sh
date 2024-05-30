@@ -35,7 +35,7 @@ read -p "Please enter the VMID: " VMID
 DEST_DIR="/usr/share/ovmf"
 
 # Create the destination directory if it doesn't exist
-sudo mkdir -p "$DEST_DIR"
+mkdir -p "$DEST_DIR"
 
 # Find the 101-ovmf.fd file and move it to the permanent directory
 EFI_CODE=$(find / -name "101-ovmf.fd" 2>/dev/null | head -n 1)
@@ -45,7 +45,7 @@ if [ -z "$EFI_CODE" ]; then
 fi
 
 # Move the 101-ovmf.fd file to the permanent directory
-sudo mv "$EFI_CODE" "$DEST_DIR"
+mv "$EFI_CODE" "$DEST_DIR"
 
 # Set the EFI_DIR variable
 EFI_DIR="$DEST_DIR"
