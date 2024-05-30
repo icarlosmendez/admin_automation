@@ -3,7 +3,7 @@
 
 # * /******************************************************************/
 # * Copyright         : <2024> <Everybody>
-# * File Name         : <ROCm_config.sh>
+# * File Name         : <ovmf_config.sh>
 # * Description       : <Setup OVMF and disable secure boot>
 # *                    
 # * Revision History  :
@@ -21,6 +21,7 @@
 #          Restart the vm to apply the new config
 
 # Prerequisites:
+# wget 
 
 # Define variables
 VMID=101
