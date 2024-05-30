@@ -21,7 +21,12 @@
 #          Restart the vm to apply the new config
 
 # Prerequisites:
-# wget 
+# wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/master/scripts/ollama/ovmf_config.sh
+
+# chmod +x ovmf_config.sh
+
+# ##################################################### #
+# The Script
 
 # Define variables
 VMID=101
