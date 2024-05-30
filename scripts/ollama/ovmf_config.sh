@@ -75,7 +75,7 @@ done
 
 # Update the VM configuration file
 echo "Updating VM configuration..."
-sudo bash -c "cat > $VM_CONF" <<EOF
+bash -c "cat > $VM_CONF" <<EOF
 args: -drive if=pflash,format=raw,readonly=on,file=$EFI_CODE -drive if=pflash,format=raw,file=$EFI_VARS
 EOF
 check_success
