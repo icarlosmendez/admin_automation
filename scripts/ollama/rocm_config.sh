@@ -134,7 +134,7 @@ if [ "$PHASE" -eq 4 ]; then
     sudo apt install -y rocm
     PHASE=5
     save_checkpoint
-    
+
     echo "Please reboot system for all settings to take effect."
     read -p "Press any key to reboot..." -n 1 -r
     sudo reboot
