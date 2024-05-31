@@ -18,9 +18,6 @@
 # Purpose: Bring the fresh clone up to proper config standards
 
 # Prerequisites:
-# * Create the vm via clone 
-# qm clone 5000 101 --full --name ollama --storage local-lvm
-
 # * Download the update script to the proxmox host
 # wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/master/scripts/ollama/ollama_update_base.sh
 
@@ -45,7 +42,11 @@ BIOS_TYPE="ovmf"
 MACHINE_TYPE="q35"
 UUID="747716ca-8b7c-40bb-a815-d26eea1df803"
 NET0_MAC="BC:24:11:63:24:12"
+STORAGE="local-lvm"
 EFIDISK="local-lvm:vm-$VMID-disk-1"
+
+# Create the vm via clone 
+qm clone 5000 $VMID --full --name $NEW_NAME --storage $STORAGE
 
 # Function to create the Logical Volume (LV) for the EFI disk
 create_efi_disk() {
