@@ -8,7 +8,7 @@
 # * Revision History  :
 # * Date		    Author 			    Comments
 # * ------------------------------------------------------------------
-# * 05/11/2024	<iCarlosMendez>	<Insprired by Code Owl>
+# * 05/11/2024	    <iCarlosMendez>	    <Insprired by Code Owl>
 # *
 # * /******************************************************************/
 
