@@ -18,9 +18,17 @@
 # Purpose: Bring the fresh clone up to proper config standards
 
 # Prerequisites:
+# * Create the vm via clone 
+# qm clone 5000 101 --full --name ollama --storage local-lvm
+
+# * Download the update script to the proxmox host
 # wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/master/scripts/ollama/ollama_update_base.sh
 
+# * Make the script executable
 # chmod +x ollama_update_base.sh
+
+# * Run the script
+# bash ollama_update_base.sh
 
 # Variables
 VMID=101
@@ -39,10 +47,29 @@ UUID="747716ca-8b7c-40bb-a815-d26eea1df803"
 NET0_MAC="BC:24:11:63:24:12"
 EFIDISK="local-lvm:vm-$VMID-disk-1"
 
-# Check if EFI disk exists, create if it doesn't
+# Function to create the Logical Volume (LV) for the EFI disk
+create_efi_disk() {
+  echo "Creating EFI disk logical volume..."
+  lvcreate -L $EFIDISK_SIZE -n vm-$VMID-disk-1 pve 2>&1 | tee -a /var/log/efi_disk_creation.log
+  if [ $? -eq 0 ]; then
+    echo "EFI disk logical volume created successfully."
+  else
+    echo "Failed to create EFI disk logical volume. Check /var/log/efi_disk_creation.log for details."
+    exit 1
+  fi
+}
+
+# Check if EFI disk exists on the LV, create if it doesn't
 if ! lvdisplay pve/vm-${VMID}-disk-1 > /dev/null 2>&1; then
-  echo "EFI disk does not exist, creating..."
-  qm set $VMID --efidisk0 $EFIDISK,efitype=$EFIDISK_TYPE,size=$EFIDISK_SIZE
+  create_efi_disk
+  echo "Assigning EFI disk to VM..."
+  qm set $VMID --efidisk0 $EFIDISK,efitype=$EFIDISK_TYPE,size=$EFIDISK_SIZE 2>&1 | tee -a /var/log/efi_disk_assignment.log
+  if [ $? -eq 0 ]; then
+    echo "EFI disk assigned successfully."
+  else
+    echo "Failed to assign EFI disk. Check /var/log/efi_disk_assignment.log for details."
+    exit 1
+  fi
 else
   echo "EFI disk already exists."
 fi
