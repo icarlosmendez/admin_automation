@@ -169,12 +169,11 @@ EOF
     dkms status
 
     # Verify ROCm installation.
-    # Not sure if the intention is to cat or ls these to ensure they exist?
+    /opt/rocm/bin/rocminfo
     /opt/rocm-6.1.1/bin/rocminfo
+    /opt/rocm/opencl/bin/clinfo
     /opt/rocm-6.1.1/bin/clinfo
 
-    /opt/rocm/bin/rocminfo
-    /opt/rocm/opencl/bin/clinfo
 
     # Ensure that the necessary kernel drivers are loaded
     if ! lsmod | grep -q amdgpu; then
