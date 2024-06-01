@@ -273,3 +273,19 @@ Number of devices:				 1
   Profile:					 FULL_PROFILE
   Version:					 OpenCL 2.0 
   Extensions:					 cl_khr_fp64 cl_khr_global_int32_base_atomics cl_khr_global_int32_extended_atomics cl_khr_local_int32_base_atomics cl_khr_local_int32_extended_atomics cl_khr_int64_base_atomics cl_khr_int64_extended_atomics cl_khr_3d_image_writes cl_khr_byte_addressable_store cl_khr_fp16 cl_khr_gl_sharing cl_amd_device_attribute_query cl_amd_media_ops cl_amd_media_ops2 cl_khr_image2d_from_buffer cl_khr_subgroups cl_khr_depth_images cl_amd_copy_buffer_p2p cl_amd_assembly_program 
+
+  06:10.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Device 744c (rev cc)
+[    3.342930] kfd kfd: amdgpu: Allocated 3969056 bytes on gart
+[    3.343306] kfd kfd: amdgpu: Total number of KFD nodes to be created: 1
+[    3.344731] kfd kfd: amdgpu: added device 1002:744c
+amdgpu              14893056  0
+amddrm_ttm_helper      16384  1 amdgpu
+amdttm                 94208  2 amdgpu,amddrm_ttm_helper
+amdxcp                 16384  1 amdgpu
+amddrm_buddy           20480  1 amdgpu
+amd_sched              53248  1 amdgpu
+amdkcl                 45056  3 amd_sched,amdttm,amdgpu
+i2c_algo_bit           16384  1 amdgpu
+drm_kms_helper        311296  3 amdgpu
+drm                   622592  9 drm_kms_helper,amd_sched,amdttm,amdgpu,amddrm_buddy,amdkcl,amddrm_ttm_helper,amdxcp
+ROCm installation and configuration complete.
