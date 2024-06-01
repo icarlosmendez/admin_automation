@@ -163,15 +163,15 @@ EOF
 
     # Configure PATH.
     # Add binary paths to the PATH environment variable.
-    export PATH=$PATH:/opt/rocm-6.1.1/bin
+    echo 'export PATH=$PATH:/opt/rocm-6.1.1/bin' >> ~/.bashrc
+    source ~/.bashrc
+
 
     # Verify kernel-mode driver installation.
     dkms status
 
     # Verify ROCm installation.
-    /opt/rocm/bin/rocminfo
     /opt/rocm-6.1.1/bin/rocminfo
-    /opt/rocm/opencl/bin/clinfo
     /opt/rocm-6.1.1/bin/clinfo
 
 
