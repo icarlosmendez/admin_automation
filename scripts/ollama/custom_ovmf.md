@@ -151,3 +151,9 @@ Conclusion:
 
 Summary of steps.
 Importance of documentation and sharing knowledge.
+
+
+# Just in case. You might need these commands to clean up a dirty ovmf install?
+apt-get remove --purge ovmf
+apt-get update
+apt-get install ovmf
