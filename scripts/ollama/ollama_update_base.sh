@@ -38,12 +38,13 @@ NEW_GW="192.168.1.1"
 HOSTPCI="0000:03:00.0"
 EFIDISK_SIZE="4M"
 EFIDISK_TYPE="4m"
-BIOS_TYPE="ovmf"
-MACHINE_TYPE="q35"
+# BIOS_TYPE="ovmf"
+MACHINE_TYPE="q35, viommu=intel"
 UUID="747716ca-8b7c-40bb-a815-d26eea1df803"
 NET0_MAC="BC:24:11:63:24:12"
 STORAGE="local-lvm"
 EFIDISK="local-lvm:vm-$VMID-disk-1"
+BALLOON=2048
 
 # Create the vm via clone 
 qm clone 5000 $VMID --full --name $NEW_NAME --storage $STORAGE
@@ -79,13 +80,17 @@ fi
 qm set $VMID --name $NEW_NAME
 qm set $VMID --cores $NEW_CORES
 qm set $VMID --memory $NEW_MEMORY
+qm set $VMID --balloon $BALLOON
 qm resize $VMID scsi0 $NEW_DISK_SIZE
 qm set $VMID --hostpci0 $HOSTPCI
 qm set $VMID --ipconfig0 ip=$NEW_IP,gw=$NEW_GW
 qm set $VMID --net0 virtio=$NET0_MAC,bridge=vmbr0
 qm set $VMID --smbios1 uuid=$UUID
-qm set $VMID --bios $BIOS_TYPE
+# qm set $VMID --bios $BIOS_TYPE
 qm set $VMID --machine $MACHINE_TYPE
+qm set $VMID --numa 0
+qm set $VMID --scsihw virtio-scsi-pci
+qm set $VMID --serial0 socket
 
 # Ensure boot settings are correct
 qm set $VMID --boot order=scsi0
