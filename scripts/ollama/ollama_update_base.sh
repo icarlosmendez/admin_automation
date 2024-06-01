@@ -87,6 +87,10 @@ qm set $VMID --smbios1 uuid=$UUID
 qm set $VMID --bios $BIOS_TYPE
 qm set $VMID --machine $MACHINE_TYPE
 
+# Ensure boot settings are correct
+qm set $VMID --boot order=scsi0
+qm set $VMID --boot c --bootdisk scsi0
+
 # Restart the VM to apply changes
 qm stop $VMID
 qm start $VMID
