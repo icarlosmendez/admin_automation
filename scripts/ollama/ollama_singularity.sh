@@ -38,7 +38,7 @@ mkdir -p /app/backend/data
 
 # Run OpenWebUI bundled with Ollama in Singularity
 singularity instance start --rocm -B /dev/kfd:/dev/kfd -B /dev/dri:/dev/dri -B /root/.ollama:/root/.ollama -B /app/backend/data:/app/backend/data open-webui.sif open-webui
-singularity exec instance://open-webui openwebui start
+# singularity exec instance://open-webui openwebui start
 singularity exec instance://open-webui bash -c "socat TCP-LISTEN:3000,fork TCP:127.0.0.1:8080" &
 
 # Open OpenWebUI in the browser
