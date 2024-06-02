@@ -134,7 +134,7 @@ if [ "$PHASE" -eq 4 ]; then
     # The entire suite
     # sudo apt install -y rocm
     # A sub-set of rocm designed for a specific usecase
-    sudo amdgpu-install --usecase=workstation,rocm
+    sudo amdgpu-install --usecase=graphics,rocm
     PHASE=5
     save_checkpoint
 
