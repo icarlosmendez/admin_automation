@@ -54,8 +54,18 @@ export VERSION=1.22.3 OS=linux ARCH=amd64 && \
     rm go$VERSION.$OS-$ARCH.tar.gz    
 
 # Set the Environment variable PATH to point to Gol
-sudo echo 'export PATH=/usr/local/go/bin:$PATH' >> ~/.bashrc && \
+sudo echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc && \
   source ~/.bashrc
+export PATH=$PATH:/usr/local/go/bin
+
+# Add Go to the root user's PATH
+sudo -i
+echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+source ~/.bashrc
+exit
+
+# Verify Go installation
+go version
 
 # Install Singularity
 # https://github.com/apptainer/singularity/releases
