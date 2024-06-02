@@ -36,8 +36,8 @@ NEW_DISK_SIZE=84172M
 NEW_IP="192.168.1.101/24"
 NEW_GW="192.168.1.1"
 HOSTPCI="0000:03:00.0"
-EFIDISK_SIZE="4M"
-EFIDISK_TYPE="4m"
+# EFIDISK_SIZE="4M"
+# EFIDISK_TYPE="4m"
 # BIOS_TYPE="ovmf"
 MACHINE_TYPE="q35, viommu=intel"
 UUID="747716ca-8b7c-40bb-a815-d26eea1df803"
@@ -98,6 +98,6 @@ qm set $VMID --boot c --bootdisk scsi0
 
 # Restart the VM to apply changes
 qm stop $VMID
-qm start $VMID
+# qm start $VMID
 
 echo "VM $VMID has been updated and restarted with the new configuration."
