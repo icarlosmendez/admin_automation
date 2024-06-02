@@ -18,6 +18,7 @@
 # Purpose: Local LLMs, what else?
 
 # Prerequisites:
+# wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/master/scripts/ollama/singularity_config.sh
 
 # https://apptainer.org/user-docs/master/quick_start.html
 # Prep the dist for package install
