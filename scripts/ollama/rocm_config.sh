@@ -131,7 +131,10 @@ if [ "$PHASE" -eq 4 ]; then
     echo "Phase 4: Install ROCm Packages and Reboot"
 
     # Install ROCm packages
-    sudo apt install -y rocm
+    # The entire suite
+    # sudo apt install -y rocm
+    # A sub-set of rocm designed for a specific usecase
+    sudo amdgpu-install --usecase=workstation,rocm
     PHASE=5
     save_checkpoint
 
