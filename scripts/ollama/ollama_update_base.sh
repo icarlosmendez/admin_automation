@@ -49,32 +49,32 @@ BALLOON=2048
 # Create the vm via clone 
 qm clone 5000 $VMID --full --name $NEW_NAME --storage $STORAGE
 
-# Function to create the Logical Volume (LV) for the EFI disk
-create_efi_disk() {
-  echo "Creating EFI disk logical volume..."
-  lvcreate -L $EFIDISK_SIZE -n vm-$VMID-disk-1 pve 2>&1 | tee -a /var/log/efi_disk_creation.log
-  if [ $? -eq 0 ]; then
-    echo "EFI disk logical volume created successfully."
-  else
-    echo "Failed to create EFI disk logical volume. Check /var/log/efi_disk_creation.log for details."
-    exit 1
-  fi
-}
+# # Function to create the Logical Volume (LV) for the EFI disk
+# create_efi_disk() {
+#   echo "Creating EFI disk logical volume..."
+#   lvcreate -L $EFIDISK_SIZE -n vm-$VMID-disk-1 pve 2>&1 | tee -a /var/log/efi_disk_creation.log
+#   if [ $? -eq 0 ]; then
+#     echo "EFI disk logical volume created successfully."
+#   else
+#     echo "Failed to create EFI disk logical volume. Check /var/log/efi_disk_creation.log for details."
+#     exit 1
+#   fi
+# }
 
-# Check if EFI disk exists on the LV, create if it doesn't
-if ! lvdisplay pve/vm-${VMID}-disk-1 > /dev/null 2>&1; then
-  create_efi_disk
-  echo "Assigning EFI disk to VM..."
-  qm set $VMID --efidisk0 $EFIDISK,efitype=$EFIDISK_TYPE,size=$EFIDISK_SIZE 2>&1 | tee -a /var/log/efi_disk_assignment.log
-  if [ $? -eq 0 ]; then
-    echo "EFI disk assigned successfully."
-  else
-    echo "Failed to assign EFI disk. Check /var/log/efi_disk_assignment.log for details."
-    exit 1
-  fi
-else
-  echo "EFI disk already exists."
-fi
+# # Check if EFI disk exists on the LV, create if it doesn't
+# if ! lvdisplay pve/vm-${VMID}-disk-1 > /dev/null 2>&1; then
+#   create_efi_disk
+#   echo "Assigning EFI disk to VM..."
+#   qm set $VMID --efidisk0 $EFIDISK,efitype=$EFIDISK_TYPE,size=$EFIDISK_SIZE 2>&1 | tee -a /var/log/efi_disk_assignment.log
+#   if [ $? -eq 0 ]; then
+#     echo "EFI disk assigned successfully."
+#   else
+#     echo "Failed to assign EFI disk. Check /var/log/efi_disk_assignment.log for details."
+#     exit 1
+#   fi
+# else
+#   echo "EFI disk already exists."
+# fi
 
 # Update VM configuration
 qm set $VMID --name $NEW_NAME
