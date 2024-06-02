@@ -59,10 +59,8 @@ sudo echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc && \
 export PATH=$PATH:/usr/local/go/bin
 
 # Add Go to the root user's PATH
-sudo -i
 echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
 source ~/.bashrc
-exit
 
 # Verify Go installation
 go version
