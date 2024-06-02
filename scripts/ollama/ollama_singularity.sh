@@ -24,8 +24,11 @@
 sudo apt-get update
 sudo apt-get install -y ca-certificates \
     curl \
-    socat \
     xdg-utils
+
+# Ensure entries in /etc/subuid and /etc/subgid for fakeroot
+echo "root:100000:65536" | sudo tee -a /etc/subuid
+echo "root:100000:65536" | sudo tee -a /etc/subgid
 
 # Create Singularity images from Docker images
 
@@ -42,6 +45,8 @@ singularity instance delete open-webui || true
 
 # Run OpenWebUI bundled with Ollama in Singularity
 singularity instance start --fakeroot --net --network-args="portmap=3000:8000/tcp" --rocm -B /dev/kfd:/dev/kfd -B /dev/dri:/dev/dri -B /root/.ollama:/root/.ollama -B /app/backend/data:/app/backend/data open-webui.sif open-webui
+
+# Start the OpenWebUI service inside the instance
 singularity exec instance://open-webui /app/backend/start.sh
 
 # Open OpenWebUI in the browser
