@@ -39,15 +39,11 @@ singularity build open-webui.sif docker://ghcr.io/open-webui/open-webui:ollama
 mkdir -p /root/.ollama
 mkdir -p /app/backend/data
 
-# Stop existing Singularity instance if it exists
-singularity instance stop open-webui || true
-singularity instance delete open-webui || true
-
 # Run OpenWebUI bundled with Ollama in Singularity
 singularity instance start --fakeroot --net --network-args="portmap=3000:8000/tcp" --rocm -B /dev/kfd:/dev/kfd -B /dev/dri:/dev/dri -B /root/.ollama:/root/.ollama -B /app/backend/data:/app/backend/data open-webui.sif open-webui
 
 # Start the OpenWebUI service inside the instance
-singularity exec instance://open-webui /app/backend/start.sh
+singularity exec --fakeroot instance://open-webui /app/backend/start.sh
 
 # Open OpenWebUI in the browser
 xdg-open http://192.168.1.101:3000 &
