@@ -30,6 +30,7 @@
 # Variables
 VMID=101
 NEW_NAME="ollama"
+NEW_CPU="host"
 NEW_CORES=4
 NEW_MEMORY=16384
 NEW_DISK_SIZE=84172M
@@ -78,6 +79,7 @@ qm clone 5000 $VMID --full --name $NEW_NAME --storage $STORAGE
 
 # Update VM configuration
 qm set $VMID --name $NEW_NAME
+qm set $VMID --cpu $NEW_CPU
 qm set $VMID --cores $NEW_CORES
 qm set $VMID --memory $NEW_MEMORY
 qm set $VMID --balloon $BALLOON
