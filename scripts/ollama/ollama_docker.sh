@@ -39,22 +39,15 @@ echo \
 sudo apt-get update
 
 # Install Docker in preparation for the next step.
-# This command is super simple and allowed me to move forward with installing docker compose, so it's useful
-# sudo apt-get install docker.io
-
-# Install Docker Compose
-# sudo apt-get install docker-compose-plugin
-
 # Install "all" the Docker packages.
-# This command may have value in install "all" the Docker packages but for now I'm using the simple version above.
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # Open WebUI running alone in a Docker container.
 # Used when Ollama is installed on the Docker host.
-# docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
+docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
 
 # Open WebUI bundled with Ollama in a single Docker container.
-docker run --device /dev/kfd --device /dev/dri --security-opt seccomp=unconfined -d -p 3000:8080 --gpus=all -v ollama:/root/.ollama -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:ollama
+# docker run --device /dev/kfd --device /dev/dri --security-opt seccomp=unconfined -d -p 3000:8080 --gpus=all -v ollama:/root/.ollama -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:ollama
 
 # First, create the volume that Portainer Server will use to store its database:
 docker volume create portainer_data
