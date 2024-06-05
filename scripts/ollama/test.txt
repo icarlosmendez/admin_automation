@@ -1,0 +1,15 @@
+ubuntu@ollama:~$ /usr/local/bin/ollama serve
+Couldn't find '/home/ubuntu/.ollama/id_ed25519'. Generating new private key.
+Your new public key is: 
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK4KQfJXcnDnzmfAQDHRni/nlLs9jspqYfNyM8cJenrN
+
+2024/06/03 05:40:33 routes.go:1007: INFO server config env="map[OLLAMA_DEBUG:false OLLAMA_FLASH_ATTENTION:false OLLAMA_HOST: OLLAMA_KEEP_ALIVE: OLLAMA_LLM_LIBRARY: OLLAMA_MAX_LOADED_MODELS:1 OLLAMA_MAX_QUEUE:512 OLLAMA_MAX_VRAM:0 OLLAMA_MODELS: OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:*] OLLAMA_RUNNERS_DIR: OLLAMA_TMPDIR:]"
+time=2024-06-03T05:40:33.472Z level=INFO source=images.go:729 msg="total blobs: 0"
+time=2024-06-03T05:40:33.473Z level=INFO source=images.go:736 msg="total unused blobs removed: 0"
+time=2024-06-03T05:40:33.473Z level=INFO source=routes.go:1053 msg="Listening on 127.0.0.1:11434 (version 0.1.41)"
+time=2024-06-03T05:40:33.473Z level=INFO source=payload.go:30 msg="extracting embedded files" dir=/tmp/ollama901342365/runners
+time=2024-06-03T05:40:36.487Z level=INFO source=payload.go:44 msg="Dynamic LLM libraries [cpu_avx cpu_avx2 cuda_v11 rocm_v60002 cpu]"
+time=2024-06-03T05:40:36.493Z level=INFO source=amd_linux.go:301 msg="amdgpu is supported" gpu=0 gpu_type=gfx1100
+time=2024-06-03T05:40:36.493Z level=INFO source=types.go:71 msg="inference compute" id=0 library=rocm compute=gfx1100 driver=6.7 name=1002:744c total="20.0 GiB" available="19.9 GiB"
+ Everything
