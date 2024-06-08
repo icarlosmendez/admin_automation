@@ -47,6 +47,7 @@ Description=Ollama Service
 After=network-online.target
 
 [Service]
+Environment="0.0.0.0"
 ExecStart=/usr/bin/ollama serve
 User=ollama
 Group=ollama
