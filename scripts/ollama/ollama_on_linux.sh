@@ -17,7 +17,18 @@
 
 # Purpose: Install Ollama natively on a Linux install, bare metal or vm.
 
-# Prerequisites: A working, configured instance of Linux. Pick your favorite distro. It will need to be capable of hosting GPU dirvers. In my case, that is the ROCm suite by AMD.
+# Prerequisites: A working, configured instance of Linux. 
+# Pick your favorite distro. It will need to be capable of hosting GPU dirvers. 
+# In my case, that is the ROCm suite by AMD.
+
+# * Download the script to your Linux host.
+# wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/master/scripts/ollama/ollama_on_linux.sh
+
+# * Make the file executable
+# sudo chmod +x ollama_on_linux.sh
+
+# * Execute the script
+# sudo bash ollama_on_linux.sh
 
 # ##################################################### #
 # The Script
@@ -53,3 +64,6 @@ sudo systemctl enable ollama
 # Start Ollama
 # Start Ollama using systemd:
 sudo systemctl start ollama
+
+# Remove the script
+sudo rm ollama_on_linux.sh
