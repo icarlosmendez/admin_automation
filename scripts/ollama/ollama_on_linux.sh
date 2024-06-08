@@ -66,5 +66,10 @@ sudo systemctl enable ollama
 # Start Ollama using systemd:
 sudo systemctl start ollama
 
+# Ask the user for the model file name
+read -p "Enter a model file name to pull so you can get started with Ollama: " model
+# Pull the LLM model file using Ollama
+sudo ollama pull $model
+
 # Remove the script
 sudo rm ollama_on_linux.sh
