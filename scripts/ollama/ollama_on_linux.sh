@@ -47,12 +47,12 @@ Description=Ollama Service
 After=network-online.target
 
 [Service]
-Environment="0.0.0.0"
 ExecStart=/usr/bin/ollama serve
 User=ollama
 Group=ollama
 Restart=always
 RestartSec=3
+Environment="0.0.0.0"
 
 [Install]
 WantedBy=default.target
