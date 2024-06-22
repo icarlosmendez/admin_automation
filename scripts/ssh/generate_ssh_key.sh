@@ -148,7 +148,7 @@ echo "Make sure to keep the private key file ($private_key_file) secure and neve
 read -r -p "Do you want to transfer the public key to the server now? (y/N): " transfer_key
 if [[ $transfer_key =~ ^[Yy]$ ]]; then
   # Use the previously gathered server_address and server_username for the SCP command
-  scp_cmd="scp ${public_key_file} ${server_username}@${server_address}:~/temp_pub_key.pub"
+  scp_cmd="scp -i ~/.ssh/${public_key_file} ${server_username}@${server_address}:~/temp_pub_key.pub"
   echo "Executing: $scp_cmd"
   eval $scp_cmd
 
@@ -188,7 +188,7 @@ exit 0
 
 # For the sake of illustration, assuming your public key is ~/.ssh/id_rsa.pub, 
 # the username is user, and the server IP is your_ip_address, the command will be:
-# scp ~/.ssh/id_rsa.pub user@your_ip_address:~/temp_pub_key.pub
+# scp -i ~/.ssh/id_rsa.pub user@your_ip_address:~/temp_pub_key.pub
 
 # This command transfers your public key to the home directory of user on the server, 
 # temporarily naming it temp_pub_key.pub.
