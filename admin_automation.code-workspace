@@ -4,5 +4,7 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"ansible.python.interpreterPath": "/Users/carlos/.pyenv/versions/3.11.7/bin/python"
+	}
 }
