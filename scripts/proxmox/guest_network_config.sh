@@ -13,41 +13,42 @@
 # * /******************************************************************/
 
 
-# This will require further verification before moving into production use.
-
-
-# Step 1. Edit network config on VM/LXC and add settings for NAT
-
 # ############### APPLIANCE NETWORK CONFIG SETTINGS: (LXC/VM) ###############
-# 100(Samba)
 # /etc/network/interfaces
 # Function to edit network configuration on VM/LXC and add settings for NAT
 edit_vm_network_config() {
+    local vlan=$1
+    local ip_address=$2
+    local gateway=$3
+    local nameserver1=$4
+    local nameserver2=$5
+
     echo "Editing network configuration on VM/LXC and adding settings for NAT..."
     cat >> /etc/network/interfaces <<EOF
 auto lo
 iface lo inet loopback
 auto eth0
 iface eth0 inet static
-address 192.168.1.100/24
-netmask 255.255.255.0
-gateway 192.168.1.1
-nameserver 8.8.8.8
-nameserver 1.1.1.1
-
-# 101(LMStudio/Ollama)
-# /etc/network/interfaces
-auto lo
-iface lo inet loopback
-auto eth0
-iface eth0 inet static
-address 192.168.100.101/24
-netmask 255.255.255.0
-gateway 192.168.100.1
-nameserver 8.8.8.8
-nameserver 1.1.1.1
+    address ${ip_address}
+    netmask 255.255.255.0
+    gateway ${gateway}
+    nameserver ${nameserver1}
+    nameserver ${nameserver2}
 EOF
 }
+
+# Example usage for different VLANs
+# VLAN 1 (Management)
+edit_vm_network_config 1 "192.168.10.10" "192.168.10.1" "8.8.8.8" "1.1.1.1"
+
+# VLAN 2 (Security)
+edit_vm_network_config 2 "192.168.20.10" "192.168.20.1" "8.8.8.8" "1.1.1.1"
+
+# VLAN 3 (Internal Services)
+edit_vm_network_config 3 "192.168.30.10" "192.168.30.1" "8.8.8.8" "1.1.1.1"
+
+# VLAN 4 (DMZ)
+edit_vm_network_config 4 "192.168.40.10" "192.168.40.1" "8.8.8.8" "1.1.1.1"
 
 # After editing, save the changes and exit the text editor. To apply the changes, restart the networking service
 systemctl restart networking.service
