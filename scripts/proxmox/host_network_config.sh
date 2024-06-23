@@ -90,16 +90,25 @@ EOF
 edit_host_network_iptables() {
     # Inform the user that the script is editing the host network iptables settings
     echo "Editing host network iptables settings..."
-    # Append the following rule to the /etc/sysconfig/iptables file
-    cat >> /etc/sysconfig/iptables <<EOF
-iptables -t nat -A PREROUTING -p tcp -d 192.168.1.11 --dport 8080 -i vmbr0 -j DNAT --to-destination 192.168.40.3:80
+    # Prompt the user to add port forwarding for a specific IP and port on the network
+    read -p "Do you want to add port forwarding for a specific IP and port on the network? (yes/no): " PORT_FORWARDING
+    if [ "$PORT_FORWARDING" == "yes" ]; then
+        # Prompt the user for destination IP, source port, and destination port
+        read -p "Enter the destination IP: " DESTINATION_IP
+        read -p "Enter the source port: " SOURCE_PORT
+        read -p "Enter the destination port: " DESTINATION_PORT
+        # Append the rule to the /etc/sysconfig/iptables file using variables
+        cat >> /etc/sysconfig/iptables <<EOF
+iptables -t nat -A PREROUTING -p tcp -d 192.168.1.11 --dport $SOURCE_PORT -i vmbr0 -j DNAT --to-destination $DESTINATION_IP:$DESTINATION_PORT
 EOF
+    else
+        echo "Skipping port forwarding configuration..."
+    fi
 }
 
 # iptables-save
 # Save the rule to the config file so that the rule is not lost/deleted/scrubbed on reboot
 # /etc/iptables.conf
-# Function to save the iptables rule to the config file
 save_iptables_rule() {
     echo "Saving the iptables rule to the config file..."
     iptables-save > /etc/iptables.conf
