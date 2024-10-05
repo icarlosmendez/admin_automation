@@ -1,0 +1,29 @@
+# roles/apt/tasks/main.yml
+
+- name: Add custom entries to sources.list
+  blockinfile:
+    path: /etc/apt/sources.list
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - DO NOT EDIT"
+    block: "{{ item }}"
+  with_items: "{{ sources_list_entries }}"
+  notify: Update apt cache
+
+
+- name: Comment out the pve-enterprise line
+  lineinfile:
+    path: /etc/apt/sources.list.d/pve-enterprise.list
+    regexp: '^deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise'
+    line: '# {{ item }}'
+  with_items:
+    - deb https://enterprise.proxmox.com/debian/pve bookworm pve-enterprise
+  notify: 
+    - Update apt cache
+    - Perform dist-upgrade
+
+
+- name: Reboot the server
+  reboot:
+    reboot_timeout: 300  # Set a timeout value for the reboot (optional)
+    wait_for_connection: yes
+
+
