@@ -1,0 +1,4 @@
+- name: Configure network on Proxmox host
+  hosts: proxmox
+  roles:
+    - network
