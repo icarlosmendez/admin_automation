@@ -1,0 +1,8 @@
+- name: Ensure network interfaces are configured
+  template:
+    src: interfaces.j2
+    dest: /etc/network/interfaces
+- name: Restart networking service
+  service:
+    name: networking
+    state: restarted
