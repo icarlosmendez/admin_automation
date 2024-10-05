@@ -1,0 +1,16 @@
+- hosts: ollama
+  vars:
+    my_user: ubuntu
+  tasks:
+    # Ensure user exists
+    - name: Ensure user exists
+      user:
+        name: "{{ my_user }}"
+        state: present
+        password: "{{ lookup('password', '') }}"
+    # Add the user to the sudo group
+    - name: Ensure user is in the sudo group
+      user:
+        name: "{{ my_user }}"
+        append: yes
+        groups: sudo
