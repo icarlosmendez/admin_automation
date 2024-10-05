@@ -35,6 +35,7 @@ edit_host_network_iptables() {
             read -p "Enter the source port: " SOURCE_PORT
             read -p "Enter the destination port: " DESTINATION_PORT
             # Append the rule to the /etc/sysconfig/iptables file using variables
+            # Note: Using modern convention /etc/iptables/rules.v4 for saving iptables rules
             cat >> /etc/iptables/rules.v4 <<EOF
 iptables -t nat -A PREROUTING -p tcp -d 192.168.1.11 --dport $SOURCE_PORT -i vmbr0 -j DNAT --to-destination $DESTINATION_IP:$DESTINATION_PORT
 EOF
@@ -46,6 +47,7 @@ EOF
 }
 
 # Save the iptables rule to the config file so that the rule is not lost/deleted/scrubbed on reboot
+# Note: Consistent with /etc/iptables/rules.v4
 save_iptables_rule() {
     echo "Saving the iptables rule to the config file..."
     iptables-save > /etc/iptables/rules.v4
