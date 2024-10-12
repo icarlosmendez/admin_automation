@@ -98,8 +98,10 @@ qm set $VMID --serial0 socket
 qm set $VMID --boot order=scsi0
 qm set $VMID --boot c --bootdisk scsi0
 
-# Restart the VM to apply changes
+# Stop the VM after config
 qm stop $VMID
+
+# Restart the VM to apply changes
 # qm start $VMID
 
 echo "VM $VMID has been updated and restarted with the new configuration."
