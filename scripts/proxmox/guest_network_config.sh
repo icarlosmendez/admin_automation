@@ -22,7 +22,7 @@ configure_guest_bridge() {
     local bridge_id=$1
     local vlan_id=$2
     local ip_address=$3
-    local gateway="192.168.${vlan_id}.1"
+    local gateway="10.10.${vlan_id}.1"
     local nameserver1=$4
     local nameserver2=$5
 
@@ -56,21 +56,21 @@ read -p "Enter the Bridge ID for this VM (e.g., 1 for vmbr1, 2 for vmbr2, etc.):
 VLAN_ID=$((BRIDGE_ID * 10))
 
 # Prompt for the last value of the IP address using the VLAN ID for the third octet
-read -p "Enter the last value for the IP address (e.g., 192.168.${VLAN_ID}.X): " LAST_VALUE
+read -p "Enter the last value for the IP address (e.g., 10.10.${VLAN_ID}.X): " LAST_VALUE
 
 # Construct the full IP address using VLAN_ID and the provided last value
-IP_ADDRESS="192.168.${VLAN_ID}.${LAST_VALUE}"
+IP_ADDRESS="10.10.${VLAN_ID}.${LAST_VALUE}"
 echo "Configured IP address: ${IP_ADDRESS}"
 
 # Prompt for DNS nameservers with defaults
 # Make sure the first of the nameservers is the LAN side IP of your edge router
 # For most home routers its the same IP you use for the management interface 
 # Unless you have a super cool one?
-read -p "Enter the primary DNS nameserver (default: 192.168.1.10): " NAMESERVER1
-NAMESERVER1=${NAMESERVER1:-192.168.1.10}
+read -p "Enter the primary DNS nameserver (default: 1.1.1.1): " NAMESERVER1
+NAMESERVER1=${NAMESERVER1:-1.1.1.1}
 
-read -p "Enter the secondary DNS nameserver (default: 8.8.8.8): " NAMESERVER2
-NAMESERVER2=${NAMESERVER2:-8.8.8.8}
+read -p "Enter the secondary DNS nameserver (default: 9.9.9.9): " NAMESERVER2
+NAMESERVER2=${NAMESERVER2:-9.9.9.9}
 
 # Call the function to configure the guest bridge
 configure_guest_bridge "${BRIDGE_ID}" "${VLAN_ID}" "${IP_ADDRESS}" "${NAMESERVER1}" "${NAMESERVER2}"
