@@ -22,13 +22,13 @@
 # This is done by the create_network_bridges method below.
 
 # Bridge identifiers: One for each VLAN to be added.
-BRIDGES=("vmbr1" "vmbr2" "vmbr3" "vmbr4")
+BRIDGES=("vmbr1" "vmbr2" "vmbr3" "vmbr4" "vmbr5")
 # Subnet IPs: One for each VLAN to be added. Adjust these according to your preferred IP structure.
-ADDRESSES=("192.168.10.1" "192.168.20.1" "192.168.30.1" "192.168.40.1")
+ADDRESSES=("10.10.10.1" "10.10.20.1" "10.10.30.1" "10.10.40.1" "10.10.50.1")
 # Slash Twenty-four. Add this to the end of the IPs.
 CIDR_SUFFIX="/24"
 # VLAN IDs: One for each VLAN to be added.
-VLAN_IDS=("10" "20" "30" "40")
+VLAN_IDS=("10" "20" "30" "40" "50")
 
 # Function to configure bridges in /etc/network/interfaces
 configure_bridges() {
@@ -172,8 +172,8 @@ main
 
 # auto vmbr0
 # iface vmbr0 inet static
-#     address 192.168.1.11/24
-#     gateway 192.168.1.1
+#     address 10.10.10.11/24
+#     gateway 10.10.10.1
 #     bridge-ports eno1
 #     bridge-stp off
 #     bridge-fd 0
@@ -216,30 +216,32 @@ main
 
 # auto vmbr1.10
 # iface vmbr1.10 inet static
-#     address 192.168.10.1/24
+#     address 10.10.10.1/24
 #     vlan-raw-device vmbr1
 
 # auto vmbr2.20
 # iface vmbr2.20 inet static
-#     address 192.168.20.1/24
+#     address 10.10.20.1/24
 #     vlan-raw-device vmbr2
 
 # auto vmbr3.30
 # iface vmbr3.30 inet static
-#     address 192.168.30.1/24
+#     address 10.10.30.1/24
 #     vlan-raw-device vmbr3
 
 # auto vmbr4.40
 # iface vmbr4.40 inet static
-#     address 192.168.40.1/24
+#     address 10.10.40.1/24
 #     vlan-raw-device vmbr4
 
 # post-up echo 1 > /proc/sys/net/ipv4/ip_forward
-# post-up iptables -t nat -A POSTROUTING -s '192.168.10.0/24' -o vmbr0 -j MASQUERADE
-# post-down iptables -t nat -D POSTROUTING -s '192.168.10.0/24' -o vmbr0 -j MASQUERADE
-# post-up iptables -t nat -A POSTROUTING -s '192.168.20.0/24' -o vmbr0 -j MASQUERADE
-# post-down iptables -t nat -D POSTROUTING -s '192.168.20.0/24' -o vmbr0 -j MASQUERADE
-# post-up iptables -t nat -A POSTROUTING -s '192.168.30.0/24' -o vmbr0 -j MASQUERADE
-# post-down iptables -t nat -D POSTROUTING -s '192.168.30.0/24' -o vmbr0 -j MASQUERADE
-# post-up iptables -t nat -A POSTROUTING -s '192.168.40.0/24' -o vmbr0 -j MASQUERADE
-# post-down iptables -t nat -D POSTROUTING -s '192.168.40.0/24' -o vmbr0 -j MASQUERADE
+# post-up iptables -t nat -A POSTROUTING -s '10.10.10.0/24' -o vmbr0 -j MASQUERADE
+# post-down iptables -t nat -D POSTROUTING -s '10.10.10.0/24' -o vmbr0 -j MASQUERADE
+# post-up iptables -t nat -A POSTROUTING -s '10.10.20.0/24' -o vmbr0 -j MASQUERADE
+# post-down iptables -t nat -D POSTROUTING -s '10.10.20.0/24' -o vmbr0 -j MASQUERADE
+# post-up iptables -t nat -A POSTROUTING -s '10.10.30.0/24' -o vmbr0 -j MASQUERADE
+# post-down iptables -t nat -D POSTROUTING -s '10.10.30.0/24' -o vmbr0 -j MASQUERADE
+# post-up iptables -t nat -A POSTROUTING -s '10.10.40.0/24' -o vmbr0 -j MASQUERADE
+# post-down iptables -t nat -D POSTROUTING -s '10.10.40.0/24' -o vmbr0 -j MASQUERADE
+# post-up iptables -t nat -A POSTROUTING -s '10.10.50.0/24' -o vmbr0 -j MASQUERADE
+# post-down iptables -t nat -D POSTROUTING -s '10.10.50.0/24' -o vmbr0 -j MASQUERADE
