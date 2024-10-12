@@ -16,6 +16,7 @@
 # Context
 
 # Purpose: Local LLMs, what else?
+# Singularity is an open source container platform designed to be simple, fast, and secure. Unlike Docker containers which requires root privileges to run containers, Singularity is designed for ease-of-use on shared multiuser systems and in high performance computing (HPC) environments. Singularity is compatible with all Docker images and it can be used with GPUs and MPI applications.
 
 # Prerequisites: Download and run the following script.
 # wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/master/scripts/ollama/ollama_singularity.sh
