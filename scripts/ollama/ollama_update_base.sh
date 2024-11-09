@@ -42,7 +42,7 @@ EFIDISK_TYPE="4m"
 BIOS_TYPE="ovmf"
 MACHINE_TYPE="q35, viommu=intel"
 # UUID="747716ca-8b7c-40bb-a815-d26eea1df803"
-# NET0_MAC="BC:24:11:63:24:12"
+NET0_MAC="BC:24:11:63:24:12"
 STORAGE="local-lvm"
 EFIDISK="local-lvm:vm-$VMID-disk-1"
 BALLOON=2048
