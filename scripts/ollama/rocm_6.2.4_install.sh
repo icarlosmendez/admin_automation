@@ -19,7 +19,7 @@
 #          and AI workloads to be run on the GPU.
 
 # Prerequisites:
-# wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/master/scripts/ollama/rocm_config.sh
+# wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/master/scripts/ollama/rocm_6.2.4_install.sh
 
 # chmod +x rocm_config.sh
 
