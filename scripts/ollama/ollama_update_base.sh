@@ -41,7 +41,7 @@ EFIDISK_SIZE="4M"
 EFIDISK_TYPE="4m"
 BIOS_TYPE="ovmf"
 MACHINE_TYPE="q35, viommu=intel"
-# UUID="747716ca-8b7c-40bb-a815-d26eea1df803"
+UUID="747716ca-8b7c-40bb-a815-d26eea1df803"
 NET0_MAC="BC:24:11:63:24:12"
 STORAGE="local-lvm"
 EFIDISK="local-lvm:vm-$VMID-disk-1"
@@ -87,8 +87,8 @@ qm resize $VMID scsi0 $NEW_DISK_SIZE
 qm set $VMID --hostpci0 $HOSTPCI
 qm set $VMID --ipconfig0 ip=$NEW_IP,gw=$NEW_GW
 qm set $VMID --net0 virtio=$NET0_MAC,bridge=vmbr0
-# qm set $VMID --smbios1 uuid=$UUID
-# qm set $VMID --bios $BIOS_TYPE
+qm set $VMID --smbios1 uuid=$UUID
+qm set $VMID --bios $BIOS_TYPE
 qm set $VMID --machine $MACHINE_TYPE
 qm set $VMID --numa 0
 qm set $VMID --scsihw virtio-scsi-pci
