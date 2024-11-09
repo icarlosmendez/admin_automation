@@ -2,13 +2,13 @@
 
 # * /******************************************************************/
 # * Copyright         : <2024> <Everybody>
-# * File Name         : <ROCm_config.sh>
+# * File Name         : <ROCm_6.2.4_install.sh>
 # * Description       : <Setup ROCm for Local LLMs/AI>
 # *                    
 # * Revision History  :
 # * Date		Author 			Comments
 # * ------------------------------------------------------------------
-# * 05/11/2024	<iCarlosMendez>	<Insprired by amd>
+# * 11/09/2024	<iCarlosMendez>	<Insprired by amd>
 # *
 # * /******************************************************************/
 
@@ -78,13 +78,13 @@ if [ "$PHASE" -eq 1 ]; then
 
     # Register kernel-mode driver
     # Add the AMDGPU repository for the driver.
-    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.1.1/ubuntu jammy main" \
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.2.4/ubuntu noble main" \
         | sudo tee /etc/apt/sources.list.d/amdgpu.list
     sudo apt update
 
     # Register ROCm packages
     # Add the ROCm repository.
-    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.1.1 jammy main" \
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.2.4 noble main" \
         | sudo tee --append /etc/apt/sources.list.d/rocm.list
 
     echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
@@ -103,7 +103,7 @@ if [ "$PHASE" -eq 2 ]; then
     sudo apt install -y "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
     sudo usermod -a -G render,video $LOGNAME # Adding current user to Video, Render groups. See prerequisites.
     wget https://repo.radeon.com/amdgpu-install/6.2.4/ubuntu/noble/amdgpu-install_6.2.60204-1_all.deb
-    sudo apt install -y ./amdgpu-install_6.1.60204-1_all.deb
+    sudo apt install -y ./amdgpu-install_6.2.60204-1_all.deb
     sudo apt update
 
     PHASE=3
