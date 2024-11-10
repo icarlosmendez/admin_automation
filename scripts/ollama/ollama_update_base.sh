@@ -103,6 +103,6 @@ qm set $VMID --boot c --bootdisk scsi0
 qm stop $VMID
 
 # Restart the VM to apply changes
-qm start $VMID
+# qm start $VMID
 
 echo "VM $VMID has been updated and restarted with the new configuration."
