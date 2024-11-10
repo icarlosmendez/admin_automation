@@ -8,7 +8,7 @@
 # * Revision History  :
 # * Date		Author 			Comments
 # * ------------------------------------------------------------------
-# * 05/11/2024	<iCarlosMendez>	<Insprired by automation>
+# * 11/09/2024	<iCarlosMendez>	<Insprired by automation>
 # *
 # * /******************************************************************/
 
@@ -27,6 +27,7 @@
 # * Run the script (This Script!)
 # bash ollama_update_base.sh
 
+# ##################################################### #
 # Variables
 VMID=101
 NEW_NAME="ollama"
@@ -102,6 +103,6 @@ qm set $VMID --boot c --bootdisk scsi0
 qm stop $VMID
 
 # Restart the VM to apply changes
-# qm start $VMID
+qm start $VMID
 
 echo "VM $VMID has been updated and restarted with the new configuration."
