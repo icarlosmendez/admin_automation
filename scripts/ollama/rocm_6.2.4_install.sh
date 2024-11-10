@@ -78,13 +78,13 @@ if [ "$PHASE" -eq 1 ]; then
 
     # Register kernel-mode driver
     # Add the AMDGPU repository for the driver.
-    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.2.4/ubuntu noble main" \
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.2.4/ubuntu jammy main" \
         | sudo tee /etc/apt/sources.list.d/amdgpu.list
     sudo apt update
 
     # Register ROCm packages
     # Add the ROCm repository.
-    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.2.4 noble main" \
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.2.4 jammy main" \
         | sudo tee --append /etc/apt/sources.list.d/rocm.list
 
     echo -e 'Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600' \
