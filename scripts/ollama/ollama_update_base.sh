@@ -105,4 +105,4 @@ qm stop $VMID
 # Restart the VM to apply changes
 # qm start $VMID
 
-echo "VM $VMID has been updated and restarted with the new configuration."
+# echo "VM $VMID has been updated and restarted with the new configuration."
