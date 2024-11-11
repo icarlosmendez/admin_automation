@@ -71,7 +71,7 @@ qm set $VM_ID --efidisk0 $STORAGE:vm-$VM_ID-disk-1,efitype=4m,size=$EFI_DISK_SIZ
 qm set $VM_ID --bios $BIOS_TYPE --machine $MACHINE_TYPE --cpu host --ostype $OSTYPE || {
     echo "Failed to set VM type and BIOS" | tee -a $LOG_FILE; exit 1;
 }
-qm set $VM_ID --vga std || { 
+qm set $VM_ID --vga virtio || { 
     echo "Failed to set VGA display adapter" | tee -a $LOG_FILE; exit 1; 
 }
 qm set $VM_ID --ipconfig0 ip=dhcp || {
@@ -94,12 +94,26 @@ qm set $VM_ID --ide2 $STORAGE:cloudinit || { echo "Failed to set Cloud-Init disk
 # Start the VM
 qm start $VM_ID || { echo "Failed to start VM" | tee -a $LOG_FILE; exit 1; }
 
-# Retrieve VM IP dynamically
+# Retrieve VM IP dynamically from guest agent
 VM_IP=$(qm guest exec $VM_ID ip a | grep -oP 'inet \K[\d.]+' | head -n 1)
 if [ -z "$VM_IP" ]; then
     echo "Failed to retrieve VM IP address via guest agent. Exiting." | tee -a $LOG_FILE
     exit 1
 fi
+
+echo "Detected VM IP: $VM_IP"
+
+# Attempt to retrieve IP from ARP table as a fallback
+if [ -z "$VM_IP" ]; then
+    echo "Attempting to retrieve VM IP from ARP table..."
+    VM_MAC=$(qm config $VM_ID | grep net0 | awk -F= '{print $2}' | cut -d',' -f1)
+    VM_IP=$(arp -n | grep $VM_MAC | awk '{print $1}')
+    if [ -z "$VM_IP" ]; then
+        echo "Failed to retrieve VM IP from ARP table. Exiting." | tee -a $LOG_FILE
+        exit 1
+    fi
+fi
+
 echo "Detected VM IP: $VM_IP"
 
 # Wait for VM to become reachable
