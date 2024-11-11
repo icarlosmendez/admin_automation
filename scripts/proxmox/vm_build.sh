@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Download the script to your Proxmox host
+wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/refs/heads/master/scripts/proxmox/vm_build.sh
+
 # Logging setup
 LOG_FILE="/var/log/ollama_vm_build.log"
 exec > >(tee -a $LOG_FILE) 2>&1
@@ -88,6 +91,9 @@ qm set $VM_ID --ipconfig0 ip=$VM_IP,gw=$VM_GW || {
 qm set $VM_ID --sshkey $SSH_KEY_PATH || {
     echo "Failed to set SSH key" | tee -a $LOG_FILE; exit 1;
 }
+qm set $VM_ID --ciuser ubuntu --cipassword ubuntu || {
+    echo "Failed to set user credentials" | tee -a $LOG_FILE; exit 1;
+}
 
 # Resize disk and set boot options
 qm resize $VM_ID scsi0 $VM_DISK_SIZE || { echo "Failed to resize disk" | tee -a $LOG_FILE; exit 1; }
@@ -99,13 +105,14 @@ qm start $VM_ID || { echo "Failed to start VM" | tee -a $LOG_FILE; exit 1; }
 # Wait for VM to become reachable
 echo "Waiting for VM to become reachable..."
 MAX_RETRIES=30
+RETRY_DELAY=5
 for i in $(seq 1 $MAX_RETRIES); do
     if ping -c 1 -W 1 ${VM_IP%%/*} > /dev/null 2>&1; then
         echo "VM is reachable!"
         break
     fi
-    echo "Ping attempt $i/$MAX_RETRIES failed. Retrying in 2 seconds..."
-    sleep 2
+    echo "Ping attempt $i/$MAX_RETRIES failed. Retrying in $RETRY_DELAY seconds..."
+    sleep $RETRY_DELAY
 done
 
 if ! ping -c 1 -W 1 ${VM_IP%%/*} > /dev/null 2>&1; then
