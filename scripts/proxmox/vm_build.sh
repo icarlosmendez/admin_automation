@@ -77,19 +77,21 @@ qm set $VM_ID --vga virtio || {
 qm set $VM_ID --ipconfig0 ip=dhcp || {
     echo "Failed to set IP configuration" | tee -a $LOG_FILE; exit 1;
 }
-qm set $VM_ID --sshkey $SSH_KEY_PATH || {
-    echo "Failed to set SSH key" | tee -a $LOG_FILE; exit 1;
+# Generate Cloud-Init configuration
+qm set $VM_ID --ide2 $STORAGE:cloudinit --ciuser $USER --cipassword $PASSWORD --sshkey $SSH_KEY_PATH || { 
+    echo "Failed to set Cloud-Init disk" | tee -a $LOG_FILE; exit 1; 
 }
-qm set $VM_ID --ciuser $USER --cipassword $PASSWORD || {
-    echo "Failed to set user credentials" | tee -a $LOG_FILE; exit 1;
-}
+# qm set $VM_ID --sshkey $SSH_KEY_PATH || {
+#     echo "Failed to set SSH key" | tee -a $LOG_FILE; exit 1;
+# }
+# qm set $VM_ID --ciuser $USER --cipassword $PASSWORD || {
+#     echo "Failed to set user credentials" | tee -a $LOG_FILE; exit 1;
+# }
 
 # Resize disk and set boot options
 qm resize $VM_ID scsi0 $VM_DISK_SIZE || { echo "Failed to resize disk" | tee -a $LOG_FILE; exit 1; }
 qm set $VM_ID --boot order=scsi0 || { echo "Failed to set boot options" | tee -a $LOG_FILE; exit 1; }
 
-# Generate Cloud-Init configuration
-qm set $VM_ID --ide2 $STORAGE:cloudinit || { echo "Failed to set Cloud-Init disk" | tee -a $LOG_FILE; exit 1; }
 
 # Start the VM
 qm start $VM_ID || { echo "Failed to start VM" | tee -a $LOG_FILE; exit 1; }
@@ -98,7 +100,7 @@ qm start $VM_ID || { echo "Failed to start VM" | tee -a $LOG_FILE; exit 1; }
 VM_IP=$(qm guest exec $VM_ID ip a | grep -oP 'inet \K[\d.]+' | head -n 1)
 if [ -z "$VM_IP" ]; then
     echo "Failed to retrieve VM IP address via guest agent. Exiting." | tee -a $LOG_FILE
-    exit 1
+    # exit 1
 fi
 
 echo "Detected VM IP: $VM_IP"
