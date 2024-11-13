@@ -47,9 +47,9 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
 
 # Or this alternative command when you have issues connecting to ollama
-docker run -d --network=host -v open-webui:/app/backend/data -e OLLAMA_BASE_URL=http://127.0.0.1:11434 --name open-webui --restart always ghcr.io/open-webui/open-webui:main
+# docker run -d --network=host -v open-webui:/app/backend/data -e OLLAMA_BASE_URL=http://127.0.0.1:11434 --name open-webui --restart always ghcr.io/open-webui/open-webui:main
 
-# Open WebUI bundled with Ollama in a single Docker container. This doesn't work with AMD GPUs.
+# Open WebUI bundled with Ollama in a single Docker container. Accoring to my testing, this doesn't work with AMD GPUs.
 # docker run --device /dev/kfd --device /dev/dri --security-opt seccomp=unconfined -d -p 3000:8080 --gpus=all -v ollama:/root/.ollama -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:ollama
 
 # First, create the volume that Portainer Server will use to store its database:
