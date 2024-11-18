@@ -40,7 +40,7 @@ check_ssh_keys() {
         echo "SSH keys already exist on the target machine."
     else
         echo "SSH keys do not exist on the target machine."
-        # Copy SSH keys from Proxmos host back to your workstation
+        # Copy SSH keys from Proxmox host back to your workstation
         # ssh-copy-id -i /path/to/public_key user@original_machine_ip
         ssh-copy-id -i $Key_Path $Init_User@$Init_IP
         progress_counter "Copying public SSH key" 2
