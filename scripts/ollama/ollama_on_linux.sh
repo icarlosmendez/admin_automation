@@ -38,7 +38,8 @@ curl -fsSL https://ollama.com/install.sh | sh
 
 # Adding Ollama as a startup service (recommended)
 # Create a user for Ollama:
-sudo useradd -r -s /bin/false -m -d /usr/share/ollama ollama
+sudo useradd -r -s /bin/false -U -m -d /usr/share/ollama ollama
+sudo usermod -a -G ollama $(whoami)
 
 # Create a service file in /etc/systemd/system/ollama.service:
 cat <<EOF | sudo tee /etc/systemd/system/ollama.service
@@ -72,4 +73,4 @@ read -p "Enter a model file name to pull so you can get started with Ollama: " m
 sudo ollama pull $model
 
 # Remove the script
-sudo rm ollama_on_linux.sh
+# sudo rm ollama_on_linux.sh
