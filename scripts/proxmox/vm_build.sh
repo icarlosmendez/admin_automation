@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Download the script to your Proxmox host
-wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/refs/heads/master/scripts/proxmox/vm_build.sh
+# wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/refs/heads/master/scripts/proxmox/vm_build.sh
 
 # Logging setup
 LOG_FILE="/var/log/ollama_vm_build.log"
@@ -82,11 +82,11 @@ qm set $VM_ID --ide2 $STORAGE:cloudinit --ciuser $USER --cipassword $PASSWORD --
     echo "Failed to set Cloud-Init disk" | tee -a $LOG_FILE; exit 1; 
 }
 # qm set $VM_ID --sshkey $SSH_KEY_PATH || {
-#     echo "Failed to set SSH key" | tee -a $LOG_FILE; exit 1;
-# }
-# qm set $VM_ID --ciuser $USER --cipassword $PASSWORD || {
-#     echo "Failed to set user credentials" | tee -a $LOG_FILE; exit 1;
-# }
+    echo "Failed to set SSH key" | tee -a $LOG_FILE; exit 1;
+}
+qm set $VM_ID --ciuser $USER --cipassword $PASSWORD || {
+    echo "Failed to set user credentials" | tee -a $LOG_FILE; exit 1;
+}
 
 # Resize disk and set boot options
 qm resize $VM_ID scsi0 $VM_DISK_SIZE || { echo "Failed to resize disk" | tee -a $LOG_FILE; exit 1; }
@@ -112,7 +112,7 @@ if [ -z "$VM_IP" ]; then
     VM_IP=$(arp -n | grep $VM_MAC | awk '{print $1}')
     if [ -z "$VM_IP" ]; then
         echo "Failed to retrieve VM IP from ARP table. Exiting." | tee -a $LOG_FILE
-        exit 1
+        # exit 1
     fi
 fi
 
@@ -138,3 +138,7 @@ fi
 
 # Final output
 echo "VM creation and configuration complete!"
+
+# Add these commands to this script in the appropriate location
+# sudo apt update
+# sudo apt install net-tools
