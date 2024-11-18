@@ -102,8 +102,8 @@ if [ "$PHASE" -eq 2 ]; then
     # Install AMD ROCm for linux (Ubuntu 22.04)
     sudo apt install -y "linux-headers-$(uname -r)" "linux-modules-extra-$(uname -r)"
     sudo usermod -a -G render,video $LOGNAME # Adding current user to Video, Render groups. See prerequisites.
-    # wget https://repo.radeon.com/amdgpu-install/6.2.4/ubuntu/noble/amdgpu-install_6.2.60204-1_all.deb
-    # sudo apt install -y ./amdgpu-install_6.2.60204-1_all.deb
+    wget https://repo.radeon.com/amdgpu-install/6.2.4/ubuntu/jammy/amdgpu-install_6.2.60204-1_all.deb
+    sudo apt install -y ./amdgpu-install_6.2.60204-1_all.deb
     sudo apt update
 
     PHASE=3
