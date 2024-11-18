@@ -59,6 +59,10 @@ docker volume create portainer_data
 docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
 
 
+
+# ##################################################### #
+# Alternative methods for installing Open WebUI "Natively"
+
 # # Open WebUI Native install (this doesn't work as of June 02, 2024)
 # pip install open-webui
 # open-webui serve
