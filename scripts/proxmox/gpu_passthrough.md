@@ -53,4 +53,4 @@ Step 6: Adding GPU to VFIO
    
 Step 7: Command to update everything and Restart  
  a) Execute: update-initramfs -u 
- b) Then restart the your Proxmox Node
+ b) Then restart the Proxmox Node
