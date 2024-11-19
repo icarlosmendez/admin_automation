@@ -60,11 +60,13 @@ verify_device_nodes() {
 # Optional: Install vendor-reset for GPUs with reset issues
 install_vendor_reset() {
     echo "Installing vendor-reset module to handle GPU resets..."
-    if [[ ! -d /usr/src/vendor-reset-* ]]; then
+    if [[ ! -f /lib/modules/$(uname -r)/extra/vendor-reset.ko ]]; then
         sudo apt-get install -y dkms
         git clone https://github.com/gnif/vendor-reset.git /tmp/vendor-reset
         cd /tmp/vendor-reset
-        sudo make dkms-install
+        make
+        sudo make install
+        sudo depmod -a
         cd -
         rm -rf /tmp/vendor-reset
         echo "vendor-reset installed successfully."
