@@ -64,17 +64,38 @@ verify_device_nodes() {
 # Optional: Install vendor-reset for GPUs with reset issues
 install_vendor_reset() {
     echo "Installing vendor-reset module to handle GPU resets..."
+
+    # Ensure kernel headers are installed and valid
+    echo "Checking kernel headers for $(uname -r)..."
+    if [[ ! -d /usr/src/linux-headers-$(uname -r) ]]; then
+        echo "Kernel headers are missing. Installing..."
+        sudo apt-get install -y linux-headers-$(uname -r)
+    else
+        echo "Kernel headers are present. Validating..."
+        if [[ ! -f /usr/src/linux-headers-$(uname -r)/modules.order ]]; then
+            echo "Kernel headers appear incomplete. Reinstalling..."
+            sudo apt-get purge -y linux-headers-$(uname -r)
+            sudo apt-get install -y linux-headers-$(uname -r)
+        else
+            echo "Kernel headers are complete."
+        fi
+    fi
+
+    # Proceed with vendor-reset installation
     if [[ ! -f /lib/modules/$(uname -r)/extra/vendor-reset.ko ]]; then
-        sudo apt-get install -y dkms linux-headers-$(uname -r)
+        sudo apt-get install -y dkms
         if [[ -d /tmp/vendor-reset ]]; then
             echo "Cleaning up existing /tmp/vendor-reset directory..."
             rm -rf /tmp/vendor-reset
         fi
+        echo "Cloning vendor-reset repository..."
         git clone https://github.com/gnif/vendor-reset.git /tmp/vendor-reset
         cd /tmp/vendor-reset
+        echo "Building vendor-reset module..."
         make
+        echo "Installing vendor-reset module..."
         sudo make install || {
-            echo "vendor-reset installation failed. Check build environment or kernel headers."
+            echo "vendor-reset installation failed. Ensure headers are correct and try again."
             cd -
             rm -rf /tmp/vendor-reset
             exit 1
