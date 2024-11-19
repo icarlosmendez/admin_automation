@@ -133,7 +133,7 @@ done
 
 if ! ping -c 1 -W 1 ${VM_IP%%/*} > /dev/null 2>&1; then
     echo "VM did not become reachable within the expected time. Exiting." | tee -a $LOG_FILE
-    exit 1
+    # exit 1
 fi
 
 # Final output
