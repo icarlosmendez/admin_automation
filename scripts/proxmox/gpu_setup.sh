@@ -50,7 +50,6 @@ setup_kernel_module() {
     fi
 }
 
-
 # Verify GPU device nodes
 verify_device_nodes() {
     echo "Verifying /dev/kfd and /dev/dri..."
@@ -66,7 +65,7 @@ verify_device_nodes() {
 install_vendor_reset() {
     echo "Installing vendor-reset module to handle GPU resets..."
     if [[ ! -f /lib/modules/$(uname -r)/extra/vendor-reset.ko ]]; then
-        sudo apt-get install -y dkms
+        sudo apt-get install -y dkms linux-headers-$(uname -r)
         if [[ -d /tmp/vendor-reset ]]; then
             echo "Cleaning up existing /tmp/vendor-reset directory..."
             rm -rf /tmp/vendor-reset
@@ -74,7 +73,12 @@ install_vendor_reset() {
         git clone https://github.com/gnif/vendor-reset.git /tmp/vendor-reset
         cd /tmp/vendor-reset
         make
-        sudo make install
+        sudo make install || {
+            echo "vendor-reset installation failed. Check build environment or kernel headers."
+            cd -
+            rm -rf /tmp/vendor-reset
+            exit 1
+        }
         sudo depmod -a
         cd -
         rm -rf /tmp/vendor-reset
@@ -83,7 +87,6 @@ install_vendor_reset() {
         echo "vendor-reset is already installed."
     fi
 }
-
 
 # Create a hook script for cleanup on VM shutdown
 setup_hook_script() {
