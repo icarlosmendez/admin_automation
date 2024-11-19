@@ -42,9 +42,14 @@ setup_kernel_module() {
         echo "amdgpu module is already loaded."
     fi
 
-    echo "Reconfiguring amdgpu-dkms if necessary..."
-    sudo dpkg-reconfigure amdgpu-dkms || true
+    if [[ ! -f /lib/modules/$(uname -r)/updates/dkms/amdgpu.ko ]]; then
+        echo "amdgpu kernel module not found. Reconfiguring amdgpu-dkms..."
+        sudo dpkg-reconfigure amdgpu-dkms
+    else
+        echo "amdgpu kernel module is properly installed. Skipping reconfiguration."
+    fi
 }
+
 
 # Verify GPU device nodes
 verify_device_nodes() {
@@ -62,6 +67,10 @@ install_vendor_reset() {
     echo "Installing vendor-reset module to handle GPU resets..."
     if [[ ! -f /lib/modules/$(uname -r)/extra/vendor-reset.ko ]]; then
         sudo apt-get install -y dkms
+        if [[ -d /tmp/vendor-reset ]]; then
+            echo "Cleaning up existing /tmp/vendor-reset directory..."
+            rm -rf /tmp/vendor-reset
+        fi
         git clone https://github.com/gnif/vendor-reset.git /tmp/vendor-reset
         cd /tmp/vendor-reset
         make
@@ -74,6 +83,7 @@ install_vendor_reset() {
         echo "vendor-reset is already installed."
     fi
 }
+
 
 # Create a hook script for cleanup on VM shutdown
 setup_hook_script() {
