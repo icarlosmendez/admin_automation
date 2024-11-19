@@ -29,18 +29,18 @@
 
 # ##################################################### #
 # Logging setup
-LOG_FILE="/var/log/ollama_vm_build.log"
+LOG_FILE="/var/log/ollama_update_base.log"
 exec > >(tee -a $LOG_FILE) 2>&1
 
 # ##################################################### #
 # Variables
-VMID=101
-NEW_NAME="ollama"
+read -p "Enter the VMID: " VMID
+read -p "Enter the new name for the VM: " NEW_NAME
 NEW_CPU="host"
 NEW_CORES=4
 NEW_MEMORY=16384
 NEW_DISK_SIZE=81920M
-NEW_IP="10.10.10.21/24"
+NEW_IP="10.10.10.44/24"
 NEW_GW="10.10.10.10"
 HOSTPCI="0000:03:00.0"
 EFIDISK_SIZE="4M"
@@ -54,10 +54,20 @@ EFIDISK="local-lvm:vm-$VMID-disk-1"
 BALLOON=2048
 OSTYPE="l26"  # Linux 6.x - 2.6 Kernel
 
+
 # Create the vm via clone 
 qm clone 5000 $VMID --full --name $NEW_NAME --storage $STORAGE || {
   echo "Failed to clone the template VM" | tee -a $LOG_FILE; exit 1;
 }
+
+# Define the SSH key path
+SSH_KEY_PATH="$HOME/.ssh/id_rsa"  # Adjust this if your key is named differently
+
+# Check if the SSH key file exists
+if [ ! -f "$SSH_KEY_PATH" ]; then
+    echo "Error: SSH key not found at $SSH_KEY_PATH. Please ensure the key exists." | tee -a $LOG_FILE
+    exit 1
+fi
 
 # Create EFI disk if missing
 if ! lvdisplay pve/vm-${VMID}-disk-1 > /dev/null 2>&1; then
@@ -72,32 +82,32 @@ else
   echo "EFI disk already exists."
 fi
 
-# # Function to create the Logical Volume (LV) for the EFI disk
-# create_efi_disk() {
-#   echo "Creating EFI disk logical volume..."
-#   lvcreate -L $EFIDISK_SIZE -n vm-$VMID-disk-1 pve 2>&1 | tee -a /var/log/efi_disk_creation.log
-#   if [ $? -eq 0 ]; then
-#     echo "EFI disk logical volume created successfully."
-#   else
-#     echo "Failed to create EFI disk logical volume. Check /var/log/efi_disk_creation.log for details."
-#     exit 1
-#   fi
-# }
+# Function to create the Logical Volume (LV) for the EFI disk
+create_efi_disk() {
+  echo "Creating EFI disk logical volume..."
+  lvcreate -L $EFIDISK_SIZE -n vm-$VMID-disk-1 pve 2>&1 | tee -a /var/log/efi_disk_creation.log
+  if [ $? -eq 0 ]; then
+    echo "EFI disk logical volume created successfully."
+  else
+    echo "Failed to create EFI disk logical volume. Check /var/log/efi_disk_creation.log for details."
+    exit 1
+  fi
+}
 
-# # Check if EFI disk exists on the LV, create if it doesn't
-# if ! lvdisplay pve/vm-${VMID}-disk-1 > /dev/null 2>&1; then
-#   create_efi_disk
-#   echo "Assigning EFI disk to VM..."
-#   qm set $VMID --efidisk0 $EFIDISK,efitype=$EFIDISK_TYPE,size=$EFIDISK_SIZE 2>&1 | tee -a /var/log/efi_disk_assignment.log
-#   if [ $? -eq 0 ]; then
-#     echo "EFI disk assigned successfully."
-#   else
-#     echo "Failed to assign EFI disk. Check /var/log/efi_disk_assignment.log for details."
-#     exit 1
-#   fi
-# else
-#   echo "EFI disk already exists."
-# fi
+# Check if EFI disk exists on the LV, create if it doesn't
+if ! lvdisplay pve/vm-${VMID}-disk-1 > /dev/null 2>&1; then
+  create_efi_disk
+  echo "Assigning EFI disk to VM..."
+  qm set $VMID --efidisk0 $EFIDISK,efitype=$EFIDISK_TYPE,size=$EFIDISK_SIZE 2>&1 | tee -a /var/log/efi_disk_assignment.log
+  if [ $? -eq 0 ]; then
+    echo "EFI disk assigned successfully."
+  else
+    echo "Failed to assign EFI disk. Check /var/log/efi_disk_assignment.log for details."
+    exit 1
+  fi
+else
+  echo "EFI disk already exists."
+fi
 
 # Update VM configuration
 qm set $VMID --name $NEW_NAME --cpu $NEW_CPU --cores $NEW_CORES --memory $NEW_MEMORY \
@@ -142,10 +152,9 @@ fi
 
 # Run apt update/upgrade inside the VM
 echo "Running apt update and upgrade inside the VM..."
-# ssh -o StrictHostKeyChecking=no -i /path/to/ssh-key ubuntu@${NEW_IP%%/*} \
-    # "sudo apt update && sudo apt upgrade -y" || {
-ssh ubuntu@${NEW_IP%%/*} "sudo apt update && sudo apt upgrade -y" || {
-    echo "Failed to update/upgrade the VM OS" | tee -a $LOG_FILE; exit 1;
+ssh -o StrictHostKeyChecking=no -i $SSH_KEY_PATH ubuntu@${NEW_IP%%/*} \
+    "sudo apt update && sudo apt upgrade -y" || {
+  echo "Failed to update/upgrade the VM OS" | tee -a $LOG_FILE; exit 1;
 }
 
 echo "VM $VMID has been updated and restarted with the new configuration."
