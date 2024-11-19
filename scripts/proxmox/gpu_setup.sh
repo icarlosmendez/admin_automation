@@ -64,50 +64,36 @@ verify_device_nodes() {
 # Optional: Install vendor-reset for GPUs with reset issues
 install_vendor_reset() {
     echo "Installing vendor-reset module to handle GPU resets..."
-
-    # Ensure kernel headers are installed and valid
-    echo "Checking kernel headers for $(uname -r)..."
-    if [[ ! -d /usr/src/linux-headers-$(uname -r) ]]; then
-        echo "Kernel headers are missing. Installing..."
-        sudo apt-get install -y linux-headers-$(uname -r)
+    
+    # Check if headers for the active kernel exist
+    ACTIVE_KERNEL=$(uname -r)
+    if [[ ! -d /usr/src/linux-headers-$ACTIVE_KERNEL ]]; then
+        echo "Headers for active kernel ($ACTIVE_KERNEL) are missing. Installing..."
+        sudo apt-get install -y linux-headers-$ACTIVE_KERNEL
     else
-        echo "Kernel headers are present. Validating..."
-        if [[ ! -f /usr/src/linux-headers-$(uname -r)/modules.order ]]; then
-            echo "Kernel headers appear incomplete. Reinstalling..."
-            sudo apt-get purge -y linux-headers-$(uname -r)
-            sudo apt-get install -y linux-headers-$(uname -r)
-        else
-            echo "Kernel headers are complete."
-        fi
+        echo "Headers for active kernel ($ACTIVE_KERNEL) are already installed."
     fi
 
-    # Proceed with vendor-reset installation
-    if [[ ! -f /lib/modules/$(uname -r)/extra/vendor-reset.ko ]]; then
-        sudo apt-get install -y dkms
-        if [[ -d /tmp/vendor-reset ]]; then
-            echo "Cleaning up existing /tmp/vendor-reset directory..."
-            rm -rf /tmp/vendor-reset
-        fi
+    # Check if vendor-reset is already installed
+    if [[ ! -d /usr/src/vendor-reset-* ]]; then
         echo "Cloning vendor-reset repository..."
+        sudo apt-get install -y dkms
         git clone https://github.com/gnif/vendor-reset.git /tmp/vendor-reset
-        cd /tmp/vendor-reset
+        
+        # Build and install the vendor-reset module
         echo "Building vendor-reset module..."
-        make
-        echo "Installing vendor-reset module..."
-        sudo make install || {
-            echo "vendor-reset installation failed. Ensure headers are correct and try again."
-            cd -
-            rm -rf /tmp/vendor-reset
-            exit 1
-        }
-        sudo depmod -a
+        cd /tmp/vendor-reset
+        sudo make clean
+        sudo make
+        sudo make install
         cd -
         rm -rf /tmp/vendor-reset
-        echo "vendor-reset installed successfully."
+        echo "vendor-reset module installed successfully."
     else
-        echo "vendor-reset is already installed."
+        echo "vendor-reset module is already installed."
     fi
 }
+
 
 # Create a hook script for cleanup on VM shutdown
 setup_hook_script() {
