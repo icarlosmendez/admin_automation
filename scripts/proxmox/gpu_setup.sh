@@ -1,11 +1,14 @@
 #!/bin/bash
 
+# Download the script
+# wget https://raw.githubusercontent.com/icarlosmendez/admin_automation/refs/heads/master/scripts/proxmox/gpu_setup.sh
+
 set -e
 
 # Configuration Variables
 VMID=${VMID:-101}  # Default to VM ID 101 if not set
 GPU_PCI_ID="0000:03:00.0"  # Replace with your GPU's PCI ID
-REQUIRED_PACKAGES=("linux-firmware" "rocm-dkms" "dkms" "git")
+REQUIRED_PACKAGES=("linux-firmware" "rocm" "dkms" "git")
 
 # Function to check and install missing packages
 install_packages() {
